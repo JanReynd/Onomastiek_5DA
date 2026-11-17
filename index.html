@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="nl-BE">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nomen est omen? · Het Namenloket – naamkunde interactief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f7f0e3;--paper2:#efe3cc;--card:#fffaf1;--ink:#1f2f44;--ink2:#4a5a6e;
+  --terra:#b4532f;--terra-l:#f5dfd2;--olive:#5f7a2e;--olive-l:#e4ead2;--blue:#2e5f8a;--blue-l:#dbe6f0;
+  --gold:#d79b2b;--gold-l:#f8e9c6;--line:#dccdb0;--ok:#2f7d4f;--ok-l:#dcefe2;--bad:#b53b2f;--bad-l:#f6dcd8;
+  --r:16px;--shadow:0 1px 0 rgba(31,47,68,.06),0 12px 28px -16px rgba(31,47,68,.35);
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;--sans:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--paper);
+  background-image:radial-gradient(rgba(180,83,47,.06) 1px,transparent 1px),radial-gradient(rgba(46,95,138,.05) 1px,transparent 1px);
+  background-size:22px 22px,34px 34px;background-position:0 0,11px 17px;line-height:1.55;font-size:17px}
+h1,h2,h3,h4{font-family:var(--serif);line-height:1.15;margin:0 0 .5em;letter-spacing:-.01em}
+h1{font-size:clamp(2.3rem,5vw,3.8rem);font-weight:800}
+h2{font-size:clamp(1.7rem,3.2vw,2.4rem);font-weight:800}
+h3{font-size:1.35rem;font-weight:600}
+h4{font-size:1.1rem;font-weight:600}
+p{margin:.4em 0 .9em}
+a{color:var(--blue)}
+button{font:inherit;cursor:pointer}
+input,textarea,select{font:inherit;color:var(--ink)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.muted{color:var(--ink2)}
+.small{font-size:.9rem}
+.center{text-align:center}
+.hl{background:linear-gradient(transparent 58%,var(--gold-l) 58%);padding:0 .1em}
+.t-terra{color:var(--terra)}.t-olive{color:var(--olive)}.t-blue{color:var(--blue)}
+
+/* HEADER */
+header.top{position:sticky;top:0;z-index:50;background:rgba(247,240,227,.94);backdrop-filter:blur(6px);border-bottom:1.5px solid var(--line)}
+.top-row{display:flex;align-items:center;gap:14px;padding:10px 20px;max-width:1120px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--ink);margin-right:auto}
+.brand-badge{width:42px;height:42px;border-radius:10px;background:var(--terra);color:#fff;display:grid;place-items:center;font-family:var(--serif);font-weight:800;font-size:1.4rem;transform:rotate(-6deg);box-shadow:2px 3px 0 var(--ink)}
+.brand b{font-family:var(--serif);font-size:1.15rem;display:block;line-height:1}
+.brand span{font-size:.8rem;color:var(--ink2);letter-spacing:.08em;text-transform:uppercase}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--card);border:1.5px solid var(--line);font-weight:700;font-size:.92rem;white-space:nowrap}
+.hbtn{border:1.5px solid var(--ink);background:var(--card);border-radius:999px;padding:6px 14px;font-weight:700;font-size:.92rem;white-space:nowrap}
+.hbtn:hover{background:var(--ink);color:var(--paper)}
+nav.stations{display:flex;gap:8px;overflow-x:auto;padding:8px 20px 12px;max-width:1120px;margin:0 auto;scrollbar-width:thin}
+nav.stations button{flex:0 0 auto;border:1.5px solid var(--line);background:var(--card);border-radius:12px;padding:6px 12px;font-size:.9rem;display:flex;align-items:center;gap:6px;color:var(--ink)}
+nav.stations button .num{font-family:var(--serif);font-weight:800;color:var(--terra)}
+nav.stations button.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+nav.stations button.active .num{color:var(--gold)}
+nav.stations button.done::after{content:"✔";font-size:.8rem;color:var(--ok);font-weight:700}
+nav.stations button.active.done::after{color:#9ee0b4}
+@media(max-width:700px){.hide-m{display:none}.top-row{gap:8px;padding:8px 12px}.brand span{display:none}}
+
+/* STATIONS */
+main{padding:28px 0 60px}
+.station{display:none;animation:fadeUp .45s ease}
+.station.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.st-head{display:flex;gap:18px;align-items:flex-start;margin-bottom:22px}
+.st-num{flex:0 0 auto;width:64px;height:64px;border-radius:50%;background:var(--card);border:2.5px dashed var(--terra);display:grid;place-items:center;font-family:var(--serif);font-weight:800;font-size:1.7rem;color:var(--terra);transform:rotate(-8deg)}
+.kicker{text-transform:uppercase;letter-spacing:.14em;font-size:.78rem;font-weight:700;color:var(--terra);margin-bottom:4px}
+.lead{font-size:1.12rem;color:var(--ink2);max-width:760px}
+
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--shadow);margin-bottom:20px;position:relative}
+.card.tape::before{content:"";position:absolute;top:-11px;left:50%;width:110px;height:22px;transform:translateX(-50%) rotate(-2deg);background:rgba(215,155,43,.45);border-radius:2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+@media(max-width:860px){.grid3,.grid5{grid-template-columns:1fr 1fr}}
+@media(max-width:640px){.grid2,.grid3,.grid5{grid-template-columns:1fr}}
+.box{border-radius:12px;padding:14px 16px;margin:12px 0;border-left:5px solid}
+.box.tip{background:var(--gold-l);border-color:var(--gold)}
+.box.let{background:var(--terra-l);border-color:var(--terra)}
+.box.weet{background:var(--olive-l);border-color:var(--olive)}
+.box.info{background:var(--blue-l);border-color:var(--blue)}
+.box b.lbl{display:block;font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;margin-bottom:2px}
+.tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:.78rem;font-weight:700;background:var(--paper2);border:1px solid var(--line);margin-right:6px}
+.tag.terra{background:var(--terra);color:#fff;border-color:var(--terra)}
+.tag.olive{background:var(--olive);color:#fff;border-color:var(--olive)}
+.tag.blue{background:var(--blue);color:#fff;border-color:var(--blue)}
+.tag.gold{background:var(--gold);color:#fff;border-color:var(--gold)}
+ul.clean{list-style:none;padding:0;margin:0}
+ul.check li{list-style:none;position:relative;padding-left:26px;margin:6px 0}
+ul.check{padding:0}
+ul.check li::before{content:"✦";position:absolute;left:4px;color:var(--terra)}
+
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:12px;padding:11px 18px;background:var(--ink);color:var(--paper);font-weight:700;box-shadow:3px 3px 0 var(--terra);transition:transform .12s,box-shadow .12s}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--terra)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--terra)}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink);box-shadow:none}
+.btn.ghost:hover{background:var(--paper2)}
+.btn.small{padding:7px 12px;font-size:.9rem}
+.btn.gold{background:var(--gold);color:var(--ink);box-shadow:3px 3px 0 var(--ink)}
+.btnrow{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;align-items:center}
+
+/* name tag */
+.nametag{max-width:430px;border-radius:18px;overflow:hidden;box-shadow:var(--shadow);border:2px solid var(--terra);background:#fff;transform:rotate(-2deg)}
+.nametag .top{background:var(--terra);color:#fff;text-align:center;padding:12px 10px 8px}
+.nametag .top b{font-family:var(--serif);font-size:2rem;letter-spacing:.06em;display:block;line-height:1}
+.nametag .top span{font-size:.9rem;letter-spacing:.2em;text-transform:uppercase}
+.nametag input{border:0;width:100%;text-align:center;font-family:"Fraunces",cursive;font-size:2rem;padding:22px 12px;background:#fff;outline:none}
+.nametag .bot{height:16px;background:var(--terra)}
+
+/* route */
+.route{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;counter-reset:r}
+@media(max-width:760px){.route{grid-template-columns:1fr 1fr}}
+.route button{text-align:left;border:1.5px dashed var(--line);background:var(--card);border-radius:14px;padding:12px;min-height:96px;color:var(--ink)}
+.route button:hover{border-color:var(--terra);border-style:solid}
+.route .ic{font-size:1.5rem}
+.route b{display:block;font-family:var(--serif)}
+
+/* stamp */
+.station-end{margin-top:34px;padding:22px;border-top:2px dashed var(--line);display:flex;flex-wrap:wrap;align-items:center;gap:16px;justify-content:space-between}
+.stamp{width:96px;height:96px;border-radius:50%;border:3px double var(--terra);color:var(--terra);display:grid;place-items:center;text-align:center;font-weight:700;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;transform:rotate(-14deg) scale(0);opacity:0;transition:.4s cubic-bezier(.2,1.6,.4,1);line-height:1.1;background:rgba(180,83,47,.06)}
+.stamp.on{transform:rotate(-14deg) scale(1);opacity:1}
+.stamp big{display:block;font-family:var(--serif);font-size:1.6rem}
+
+/* schema tree */
+.tree{display:flex;flex-direction:column;align-items:center;gap:0}
+.tree .root{background:var(--ink);color:var(--paper);padding:10px 22px;border-radius:12px;font-family:var(--serif);font-weight:800;font-size:1.3rem}
+.tree .branches{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;width:100%;margin-top:26px;position:relative}
+.tree .branches::before{content:"";position:absolute;top:-14px;left:16%;right:16%;height:2px;background:var(--line)}
+.tree .node{background:var(--card);border:1.5px solid var(--line);border-radius:12px;padding:12px;position:relative}
+.tree .node::before{content:"";position:absolute;top:-14px;left:50%;width:2px;height:14px;background:var(--line)}
+.tree .node h4{margin:0 0 4px}
+@media(max-width:700px){.tree .branches{grid-template-columns:1fr}.tree .branches::before{display:none}}
+.stems{display:flex;flex-wrap:wrap;gap:8px}
+.stem{border:1.5px solid var(--ink);background:#fff;border-radius:10px;padding:8px 12px;font-weight:700}
+.stem.on{background:var(--gold);}
+.stem small{display:block;font-weight:400;font-size:.78rem;color:var(--ink2)}
+.wordout{font-family:var(--serif);font-size:1.6rem;font-weight:800;margin:14px 0 4px;color:var(--terra);min-height:2rem}
+
+/* landscape */
+.land{width:100%;height:auto;border-radius:14px;border:1.5px solid var(--line);background:#f3e7cf;display:block}
+.hot{cursor:pointer}
+.hot circle.pulse{animation:pulse 1.8s infinite;transform-origin:center;transform-box:fill-box}
+@keyframes pulse{0%{transform:scale(.8);opacity:.9}100%{transform:scale(2.2);opacity:0}}
+.hot:focus{outline:none}
+.hot:focus circle.dot,.hot:hover circle.dot{fill:var(--gold)}
+.hotinfo{min-height:120px}
+
+/* timeline */
+.tl{display:flex;gap:0;position:relative;margin:18px 0 8px}
+.tl::before{content:"";position:absolute;top:26px;left:4%;right:4%;height:4px;background:repeating-linear-gradient(90deg,var(--terra) 0 12px,transparent 12px 20px)}
+.tl button{flex:1;background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:8px;position:relative;color:var(--ink);padding:0 4px}
+.tl .dot{width:54px;height:54px;border-radius:50%;background:var(--card);border:3px solid var(--terra);display:grid;place-items:center;font-size:1.4rem;transition:.2s}
+.tl button.on .dot{background:var(--terra);transform:scale(1.1)}
+.tl b{font-family:var(--serif);font-size:.98rem;text-align:center}
+.tl small{font-size:.8rem;color:var(--ink2);text-align:center}
+@media(max-width:640px){.tl{flex-wrap:wrap;row-gap:14px}.tl::before{display:none}.tl button{flex:0 0 50%}}
+.tl-detail{background:var(--paper2);border-radius:14px;padding:16px 18px;min-height:90px}
+
+/* flip cards */
+.flip{perspective:1000px;height:300px;cursor:pointer;border:0;background:none;padding:0;text-align:left;width:100%}
+.flip-in{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+.flip.flipped .flip-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:16px;padding:16px;border:2px solid;display:flex;flex-direction:column;overflow:auto;background:var(--card)}
+.face.front{justify-content:center;align-items:center;text-align:center}
+.face.front .big{font-size:2.6rem}
+.face.front h4{font-size:1.2rem;margin:8px 0 4px}
+.face.front q{font-style:italic;color:var(--ink2);font-size:.95rem}
+.face.back{transform:rotateY(180deg);font-size:.9rem}
+.face.back h4{margin-bottom:4px}
+.face .hint{position:absolute;bottom:8px;right:12px;font-size:.72rem;color:var(--ink2)}
+
+/* tile map */
+.tilemap{display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(6,auto);gap:6px;max-width:560px}
+.tile{border-radius:10px;padding:8px 6px;color:#fff;font-size:.78rem;line-height:1.15;min-height:64px;border:0;text-align:left;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 2px 0 rgba(0,0,0,.15)}
+.tile b{font-size:1.15rem;font-family:var(--serif)}
+.tile.sel{outline:3px solid var(--ink);outline-offset:2px}
+.tile .cty{opacity:.8;font-size:.68rem;letter-spacing:.08em}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}
+.legend span{display:inline-flex;align-items:center;gap:6px;font-size:.88rem}
+.legend i{width:14px;height:14px;border-radius:4px;display:inline-block}
+
+/* wheel */
+.wheel{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:520px;aspect-ratio:1;position:relative;margin:0 auto}
+.wheel button{border:0;color:#fff;font-family:var(--serif);font-weight:600;font-size:1.05rem;padding:22px;display:flex;flex-direction:column;justify-content:center;gap:4px;transition:.2s}
+.wheel button span{font-size:2rem}
+.wheel button small{font-family:var(--sans);font-weight:400;font-size:.82rem;opacity:.9}
+.wheel button:nth-child(1){border-radius:100% 0 0 0;background:var(--olive);align-items:flex-end;text-align:right}
+.wheel button:nth-child(2){border-radius:0 100% 0 0;background:var(--blue);align-items:flex-start}
+.wheel button:nth-child(3){border-radius:0 0 0 100%;background:var(--terra);align-items:flex-end;text-align:right}
+.wheel button:nth-child(4){border-radius:0 0 100% 0;background:#8a6b4a;align-items:flex-start}
+.wheel button.on{filter:brightness(1.12);transform:scale(1.03)}
+.wheel .hub{position:absolute;inset:36%;border-radius:50%;background:var(--card);border:3px solid var(--ink);display:grid;place-items:center;text-align:center;font-family:var(--serif);font-weight:800;font-size:.95rem;pointer-events:none;padding:6px}
+
+/* exercises */
+.ex{margin-top:6px}
+.q{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;margin:12px 0}
+.q-head{margin-bottom:10px}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;border:1.5px solid var(--line);background:var(--card);border-radius:10px;padding:9px 12px;display:flex;gap:10px;align-items:flex-start;color:var(--ink)}
+.opt:hover:not(:disabled){border-color:var(--ink)}
+.opt .letter{flex:0 0 auto;width:24px;height:24px;border-radius:50%;background:var(--paper2);display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.opt.correct{background:var(--ok-l);border-color:var(--ok)}
+.opt.correct .letter{background:var(--ok);color:#fff}
+.opt.wrong{background:var(--bad-l);border-color:var(--bad)}
+.opt.wrong .letter{background:var(--bad);color:#fff}
+.opt:disabled{cursor:default}
+.fb{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--paper2);font-size:.95rem}
+.result{margin-top:14px}
+.scorecard{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:var(--ink);color:var(--paper);border-radius:14px;padding:14px 18px}
+.scorecard .sc{font-family:var(--serif);font-size:2rem;font-weight:800;color:var(--gold)}
+.bin{display:flex;gap:8px;flex-wrap:wrap}
+.bin .opt{flex:0 0 auto}
+.binrow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+
+.pool{display:flex;flex-wrap:wrap;gap:8px;min-height:54px;padding:10px;border:2px dashed var(--line);border-radius:12px;background:var(--paper)}
+.chip{border:1.5px solid var(--ink);background:#fff;border-radius:999px;padding:6px 12px;font-weight:700;font-size:.92rem;color:var(--ink);user-select:none}
+.chip.sel{background:var(--gold);box-shadow:0 0 0 3px rgba(215,155,43,.35)}
+.chip.ok{background:var(--ok-l);border-color:var(--ok)}
+.chip.no{background:var(--bad-l);border-color:var(--bad);text-decoration:line-through}
+.buckets{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:12px}
+.bucket{border:1.5px solid var(--line);border-radius:12px;background:var(--card);min-height:120px;display:flex;flex-direction:column}
+.bucket .bh{padding:8px 10px;border-radius:10px 10px 0 0;color:#fff;font-weight:700;font-size:.92rem;border:0;text-align:left}
+.bucket .bh small{display:block;font-weight:400;opacity:.9;font-size:.78rem}
+.bucket .bz{padding:8px;display:flex;flex-wrap:wrap;gap:6px;flex:1;align-content:flex-start}
+.bucket.over{outline:3px dashed var(--gold)}
+.hintline{font-size:.88rem;color:var(--ink2);margin:6px 0}
+
+.mrow{display:grid;grid-template-columns:1fr 260px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line)}
+@media(max-width:640px){.mrow{grid-template-columns:1fr}}
+select{border:1.5px solid var(--ink);border-radius:10px;padding:8px 10px;background:#fff;width:100%}
+select.ok,input.ok{border-color:var(--ok);background:var(--ok-l)}
+select.no,input.no{border-color:var(--bad);background:var(--bad-l)}
+.gap{line-height:2.4}
+.gap input{border:0;border-bottom:2px solid var(--ink);background:#fff;border-radius:6px 6px 0 0;padding:2px 8px;width:9.5em;text-align:center}
+.bank{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.bank .chip.used{opacity:.35}
+ol.order{padding:0;margin:0;list-style:none;counter-reset:o}
+ol.order li{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;margin:8px 0;counter-increment:o}
+ol.order li::before{content:counter(o);font-family:var(--serif);font-weight:800;color:var(--terra);font-size:1.3rem;width:24px}
+ol.order li .tx{flex:1}
+ol.order li button{border:1.5px solid var(--ink);background:var(--card);border-radius:8px;width:34px;height:34px}
+ol.order li.ok{border-color:var(--ok);background:var(--ok-l)}
+ol.order li.no{border-color:var(--bad);background:var(--bad-l)}
+
+textarea{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;background:#fff;min-height:90px;resize:vertical}
+textarea:focus,input:focus,select:focus{outline:3px solid rgba(215,155,43,.5);outline-offset:1px}
+.counter{font-size:.85rem;font-weight:700;margin-top:4px}
+.counter.in{color:var(--ok)}.counter.out{color:var(--terra)}
+table.tab{width:100%;border-collapse:separate;border-spacing:0;font-size:.93rem}
+table.tab th{background:var(--ink);color:var(--paper);text-align:left;padding:8px 10px;font-weight:700}
+table.tab th:first-child{border-radius:10px 0 0 0}table.tab th:last-child{border-radius:0 10px 0 0}
+table.tab td{border-bottom:1px solid var(--line);padding:8px 10px;vertical-align:top;background:#fff}
+table.tab td textarea{min-height:64px;font-size:.9rem}
+.tabscroll{overflow-x:auto}
+.rub td.cell{cursor:pointer;font-size:.85rem}
+.rub td.cell:hover{background:var(--gold-l)}
+.rub td.cell.on{background:var(--gold);font-weight:700}
+
+/* expert */
+.groups{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:760px){.groups{grid-template-columns:1fr}}
+.gcard{border:0;border-radius:18px;padding:20px;text-align:left;color:#fff;min-height:200px;display:flex;flex-direction:column;gap:6px;box-shadow:var(--shadow);transition:transform .15s}
+.gcard:hover{transform:translateY(-3px) rotate(-.5deg)}
+.gcard .ic{font-size:2.2rem}
+.gcard h3{color:#fff;margin:0}
+.gcard.sel{outline:4px solid var(--gold);outline-offset:3px}
+.g1{background:var(--terra)}.g2{background:var(--olive)}.g3{background:var(--blue)}
+.dossier{border-top:6px solid;border-radius:var(--r)}
+.dossier.d1{border-color:var(--terra)}.dossier.d2{border-color:var(--olive)}.dossier.d3{border-color:var(--blue)}
+details.acc{background:var(--card);border:1.5px solid var(--line);border-radius:14px;margin:10px 0}
+details.acc summary{cursor:pointer;padding:12px 16px;font-weight:700;font-family:var(--serif);font-size:1.08rem;list-style:none;display:flex;justify-content:space-between;align-items:center}
+details.acc summary::after{content:"＋";font-family:var(--sans);color:var(--terra)}
+details.acc[open] summary::after{content:"－"}
+details.acc .in{padding:0 16px 16px}
+.checklist label{display:flex;gap:10px;align-items:flex-start;padding:6px 0;cursor:pointer}
+.checklist input{width:20px;height:20px;accent-color:var(--terra);flex:0 0 auto;margin-top:2px}
+
+/* links */
+.linkcard{display:flex;flex-direction:column;gap:6px;background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:16px;text-decoration:none;color:var(--ink);transition:.15s;height:100%}
+.linkcard:hover{border-color:var(--terra);transform:translateY(-2px)}
+.linkcard .dom{font-size:.8rem;color:var(--terra);font-weight:700;word-break:break-all}
+.linkcard .mission{background:var(--gold-l);border-radius:10px;padding:8px 10px;font-size:.88rem;margin-top:auto}
+
+/* analyser */
+.analyser{display:flex;gap:10px;flex-wrap:wrap}
+.analyser input{flex:1;min-width:200px;border:2px solid var(--ink);border-radius:12px;padding:12px 14px;font-size:1.1rem;font-family:var(--serif)}
+.verdict{margin-top:14px;border-radius:14px;padding:16px;color:#fff;display:none}
+.verdict.on{display:block;animation:fadeUp .3s}
+.verdict h4{color:#fff;margin:0 0 4px}
+
+/* drawer & modal */
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(440px,94vw);background:var(--card);border-left:2px solid var(--ink);z-index:80;transform:translateX(105%);transition:transform .3s;display:flex;flex-direction:column;box-shadow:-10px 0 30px rgba(0,0,0,.15)}
+.drawer.on{transform:none}
+.drawer header{padding:16px;border-bottom:1.5px solid var(--line);display:flex;align-items:center;gap:10px}
+.drawer header h3{margin:0;flex:1}
+.drawer .x{border:1.5px solid var(--ink);background:#fff;border-radius:50%;width:36px;height:36px;font-size:1.1rem}
+.drawer input{margin:12px 16px 4px;border:1.5px solid var(--ink);border-radius:10px;padding:10px}
+.drawer .list{overflow:auto;padding:4px 16px 20px}
+.term{padding:10px 0;border-bottom:1px dashed var(--line)}
+.term b{font-family:var(--serif);font-size:1.05rem;color:var(--terra)}
+.term .syn{font-size:.8rem;color:var(--ink2)}
+.scrim{position:fixed;inset:0;background:rgba(31,47,68,.35);z-index:70;display:none}
+.scrim.on{display:block}
+.modal{position:fixed;inset:4vh 0 auto 0;margin:0 auto;width:min(980px,94vw);max-height:92vh;overflow:auto;background:var(--paper);border:2px solid var(--ink);border-radius:20px;z-index:90;display:none;padding:26px;box-shadow:0 30px 60px rgba(0,0,0,.3)}
+.modal.on{display:block;animation:fadeUp .3s}
+.modal .x{position:sticky;top:0;float:right;border:1.5px solid var(--ink);background:#fff;border-radius:50%;width:38px;height:38px;font-size:1.1rem}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--ink);color:var(--paper);padding:12px 20px;border-radius:999px;z-index:100;transition:.3s;font-weight:700;box-shadow:var(--shadow)}
+.toast:not(.on){opacity:0;pointer-events:none}
+.toast.on{transform:translateX(-50%);opacity:1}
+.confetti{position:fixed;top:-12px;width:10px;height:14px;z-index:120;pointer-events:none;animation:fall 1.6s ease-in forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg);opacity:.7}}
+
+.reading{background:#fffdf7;border:1.5px solid var(--line);border-radius:16px;padding:26px 30px;font-size:1.03rem;max-width:820px;margin:0 auto 20px;box-shadow:var(--shadow)}
+.reading h3{color:var(--terra);margin-top:1.2em}
+.reading .al{display:flex;gap:12px}
+.reading .al .n{flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:var(--paper2);display:grid;place-items:center;font-size:.8rem;font-weight:700;margin-top:4px}
+.reading .lead-in{font-style:italic;color:var(--ink2);border-left:4px solid var(--gold);padding-left:12px}
+.step{display:flex;gap:12px;align-items:flex-start;margin:6px 0 14px}
+.step .s{flex:0 0 auto;background:var(--terra);color:#fff;border-radius:10px;padding:4px 10px;font-weight:700;font-size:.85rem}
+footer{border-top:1.5px solid var(--line);padding:24px 0 40px;font-size:.88rem;color:var(--ink2)}
+#printArea{display:none}
+@media print{
+  body.printing>*:not(#printArea){display:none!important}
+  body.printing #printArea{display:block!important;padding:20px}
+  body{background:#fff}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-row">
+    <a class="brand" href="#" data-go="0" aria-label="Naar start">
+      <div class="brand-badge">N</div>
+      <div><b>Het Namenloket</b><span>Nomen est omen?</span></div>
+    </a>
+    <span class="pill" title="Punten uit alle oefeningen">⭐ <span id="ptsTotal">0</span><span class="hide-m">&nbsp;punten</span></span>
+    <span class="pill hide-m" title="Afgeronde stations">🏷️ <span id="stampCount">0</span>/10</span>
+    <button class="hbtn" id="openGloss">📖 <span class="hide-m">Begrippen</span></button>
+    <button class="hbtn" id="openTeacher">🎓 <span class="hide-m">Leraar</span></button>
+  </div>
+  <nav class="stations" id="stationNav" aria-label="Stations"></nav>
+</header>
+
+<main class="wrap">
+
+<!-- ========== 0 START ========== -->
+<section class="station" id="st0" data-title="Start">
+  <div class="grid2" style="align-items:center;gap:36px">
+    <div>
+      <div class="kicker">Naamkunde · onomastiek · 3de graad</div>
+      <h1>Nomen est <span class="t-terra">omen?</span></h1>
+      <p class="lead">Je naam is het eerste wat je kreeg en het eerste wat anderen van je horen. Maar waar komt hij vandaan, wat betekende hij ooit, en zegt hij iets over jou? Word <b>naamdetective</b> en ontdek de taal van identiteit.</p>
+      <div class="btnrow"><button class="btn" data-go="1">Start de route →</button><button class="btn ghost" data-go="6">Ga meteen naar je expertgroep</button></div>
+    </div>
+    <div>
+      <div class="nametag" aria-label="Naamkaartje">
+        <div class="top"><b>HALLO</b><span>ik heet</span></div>
+        <input id="studentName" data-save="naam" placeholder="jouw naam" aria-label="Jouw naam" autocomplete="off">
+        <div class="bot"></div>
+      </div>
+      <p class="small muted center" style="margin-top:14px">Je naam blijft enkel op dit toestel en komt op je exit ticket.</p>
+    </div>
+  </div>
+
+  <div class="card tape" style="margin-top:34px">
+    <h3>🔍 Opwarmer: wat weet jij al?</h3>
+    <div class="grid3">
+      <div><b>1. Wie koos jouw voornaam, en waarom?</b><textarea data-save="warm1" placeholder="Bv. mijn mama, naar mijn oma…"></textarea></div>
+      <div><b>2. Wat zou je familienaam ooit betekend hebben?</b><textarea data-save="warm2" placeholder="Doe een gok, we checken het later!"></textarea></div>
+      <div><b>3. Welke naam gebruiken vrienden voor jou?</b><textarea data-save="warm3" placeholder="Bijnaam, roepnaam, schermnaam…"></textarea></div>
+    </div>
+  </div>
+
+  <h3 style="margin-top:30px">🗺️ Jouw route</h3>
+  <div class="route" id="routeMap"></div>
+
+  <div class="card" style="margin-top:24px">
+    <h3>🎯 Na deze route kan je…</h3>
+    <ul class="check">
+      <li>uitleggen wat <b>onomastiek</b> is en de pijlers <b>toponymie</b> en <b>antroponymie</b> onderscheiden;</li>
+      <li>uitleggen <b>wanneer, waarom en hoe familienamen ontstonden</b> en een naam aan een <b>benoemingsmotief</b> koppelen;</li>
+      <li>de <b>evolutie van voornamen</b> in vier periodes beschrijven;</li>
+      <li>uitleggen of en hoe een naam je <b>keuzes</b> en je <b>kansen</b> beïnvloedt, en <b>feiten van aannames</b> onderscheiden;</li>
+      <li>betrouwbare <b>naamdatabanken</b> gebruiken om je eigen naam te onderzoeken en daarover te schrijven.</li>
+    </ul>
+  </div>
+  <div class="station-end" data-end="0"></div>
+</section>
+
+<!-- ========== 1 NAAMKUNDE ========== -->
+<section class="station" id="st1" data-title="Naamkunde">
+  <div class="st-head"><div class="st-num">1</div><div><div class="kicker">Station 1</div><h2>Wat is naamkunde?</h2><p class="lead">Namen zijn geen gewone etiketten. Het zijn <span class="hl">taalkundige monumenten</span>: ze vertellen iets over geschiedenis, geografie en maatschappij.</p></div></div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>De definitie</h3>
+      <p><b>Onomastiek</b> of <b>naamkunde</b> is de tak van de taalkunde die de <b>betekenis</b>, de <b>oorsprong</b> en de <b>verspreiding</b> van namen onderzoekt.</p>
+      <p>Het woord komt van het Griekse <i>ὄνομα (ónoma)</i> = ‘naam’. Naamkunde is verwant aan de <b>etymologie</b>, die de herkomst en de oorspronkelijke betekenis van woorden bestudeert.</p>
+      <div class="box weet"><b class="lbl">Eigennaam of soortnaam?</b>
+        <b>bakker</b> is een <b>soortnaam</b> (appellatief): het woord noemt een hele groep mensen. <b>De Bakker</b> is een <b>eigennaam</b>: de naam wijst één persoon of familie aan. Als een soortnaam een eigennaam wordt, verliest hij zijn betekenis. Meneer <i>Timmerman</i> hoeft geen timmerman te zijn, en de nazaten van <i>De Groote</i> kunnen best klein zijn.</div>
+    </div>
+    <div class="card">
+      <h3>🧩 Bouw zelf vaktaal</h3>
+      <p class="small">Veel vaktermen bestaan uit een Griekse of Latijnse stam + <b>-oniem</b> (‘naam’). Klik een stam aan.</p>
+      <div class="stems" id="stems"></div>
+      <div class="wordout" id="stemWord">…oniem</div>
+      <div id="stemExpl" class="muted">Kies een stam en ontdek het woord.</div>
+      <div class="box tip"><b class="lbl">Strategie</b>Ken je een woord niet? Splits het in <b>woorddelen</b>. Zo raad je vaak de betekenis.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Het schema van de onomastiek</h3>
+    <div class="tree">
+      <div class="root">Onomastiek = naamkunde</div>
+      <div class="branches">
+        <div class="node" style="border-top:5px solid var(--olive)"><h4>🗺️ Toponymie</h4><p class="small">Plaatsnaamkunde (Gr. <i>tópos</i> = plaats)</p><ul class="small" style="padding-left:18px;margin:0"><li>hydroniemen: waternamen</li><li>oroniemen: berg- en heuvelnamen</li><li>hodoniemen: straat- en wegnamen</li><li>veldnamen, nederzettingsnamen…</li></ul></div>
+        <div class="node" style="border-top:5px solid var(--terra)"><h4>👨‍👩‍👧 Antroponymie</h4><p class="small">Persoonsnaamkunde (Gr. <i>ánthropos</i> = mens)</p><ul class="small" style="padding-left:18px;margin:0"><li>voornamen</li><li>familienamen (achternamen)</li><li>bijnamen, roepnamen, koosnamen</li><li>pseudoniemen, schermnamen…</li></ul></div>
+        <div class="node" style="border-top:5px solid var(--blue)"><h4>🏷️ Andere namen</h4><p class="small">Ook die bestudeert de naamkunde</p><ul class="small" style="padding-left:18px;margin:0"><li>merknamen en handelsnamen</li><li>objectnamen (schepen, kunstwerken)</li><li>dierennamen</li><li>gebeurtenisnamen (stormen, oorlogen)</li></ul></div>
+      </div>
+    </div>
+    <p class="small muted center" style="margin-top:14px">De twee grote pijlers zijn toponymie en antroponymie.</p>
+  </div>
+  <div class="station-end" data-end="1"></div>
+</section>
+
+<!-- ========== 2 PLAATSNAMEN ========== -->
+<section class="station" id="st2" data-title="Plaatsnamen">
+  <div class="st-head"><div class="st-num">2</div><div><div class="kicker">Station 2 · toponymie</div><h2>De bodem spreekt</h2><p class="lead">Toponymie spoort plaatsnamen op, verklaart ze en bestudeert hoe ze verspreid zijn. Ze is een hulpwetenschap voor de <b>archeologie</b> en de <b>historische geografie</b>.</p></div></div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Exacte wetenschap, géén volksverhaal</h3>
+      <p>Toponymie steunt <b>niet</b> op sagen of volksverhalen. De onderzoeker zoekt de <span class="hl">oudste geschreven vorm</span> van een naam (de <b>attestatie</b>), want die is taalkundig het meest ‘doorzichtig’.</p>
+      <p>Wat leer je uit plaatsnamen?</p>
+      <ul class="check">
+        <li><b>Landschap:</b> bodem, reliëf, waterlopen, vroegere plantengroei</li>
+        <li><b>Menselijke geschiedenis:</b> oude beroepen, nederzettingen, activiteiten, namen van vroegere bewoners</li>
+        <li><b>Cultuur en religie:</b> plaatselijke heiligen en hoe de taal evolueerde</li>
+      </ul>
+      <div class="box let"><b class="lbl">Valkuil: volksetymologie</b>Mensen passen een oude, onbegrijpelijk geworden naam aan een bekend woord aan. Het <i>Pertsebos</i> (<i>pertse</i> = ‘hoge stam’) werd zo het <i>Peerdsbos</i> (‘paardenbos’), maar met paarden heeft het niets te maken.</div>
+    </div>
+    <div class="card">
+      <h3>Natuurlijk of kunstmatig?</h3>
+      <p><b>Natuurlijke naamgeving</b> ontstaat spontaan en verwijst naar iets concreets ter plaatse, zoals <i>Molenbeek</i> (een beek die een molen aandreef) of <i>Dikkelelindestraat</i> (naar één opvallende dikke linde).</p>
+      <p><b>Kunstmatige naamgeving</b> wordt gepland en heeft geen band met de plek: <i>Koningin Astridlaan</i>, <i>Groot-Brittanniëlaan</i>, of een <b>fantasienaam</b> als <i>Beukenlaan</i> in een nieuwe wijk zonder beuken.</p>
+      <div class="box weet"><b class="lbl">Wist je dat?</b>Een naam kan <b>overgedragen</b> worden: <i>Linkebeek</i> was eerst de naam van een beek en werd later de naam van het dorp dat ernaast ontstond.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🏞️ De taal van het landschap</h3>
+    <p class="small">Klik op de pulserende punten in het landschap.</p>
+    <div class="grid2" style="align-items:start">
+      <svg class="land" viewBox="0 0 800 420" role="img" aria-label="Landschap met klikbare naamsoorten" id="landSvg">
+        <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7ecd6"/><stop offset="1" stop-color="#efe1c2"/></linearGradient></defs>
+        <rect width="800" height="420" fill="url(#sky)"/>
+        <polygon points="0,210 80,120 150,180 250,60 340,170 420,100 520,190 610,110 700,170 800,120 800,270 0,270" fill="#b9bfae"/>
+        <polygon points="250,60 228,92 246,86 262,98 272,88" fill="#fff"/><polygon points="610,110 592,136 610,130 626,140" fill="#fff"/><polygon points="420,100 404,124 422,118 436,126" fill="#fff"/>
+        <path d="M0 260 Q200 200 400 250 T800 240 V420 H0Z" fill="#a8b67c"/>
+        <path d="M0 310 Q220 270 420 305 T800 300 V420 H0Z" fill="#93a463"/>
+        <g opacity=".85"><polygon points="20,330 220,312 250,410 30,420" fill="#d9c38b"/><line x1="48" y1="328" x2="62" y2="418" stroke="#c4aa68" stroke-width="5"/><line x1="90" y1="324" x2="110" y2="418" stroke="#c4aa68" stroke-width="5"/><line x1="135" y1="320" x2="160" y2="416" stroke="#c4aa68" stroke-width="5"/><line x1="180" y1="316" x2="208" y2="414" stroke="#c4aa68" stroke-width="5"/></g>
+        <path d="M430 230 C460 280 380 300 470 340 S600 360 640 420" fill="none" stroke="#5f8fbb" stroke-width="26" stroke-linecap="round"/>
+        <path d="M430 230 C460 280 380 300 470 340 S600 360 640 420" fill="none" stroke="#9cc1df" stroke-width="10" stroke-linecap="round" stroke-dasharray="18 22"/>
+        <path d="M260 420 C320 360 470 375 560 360 S720 330 800 335" fill="none" stroke="#857a69" stroke-width="18"/>
+        <path d="M260 420 C320 360 470 375 560 360 S720 330 800 335" fill="none" stroke="#f3e7cf" stroke-width="2" stroke-dasharray="10 10"/>
+        <path d="M520 372 Q548 340 578 360" fill="none" stroke="#6b5f50" stroke-width="7"/>
+        <g><rect x="300" y="268" width="34" height="26" fill="#efe3cc" stroke="#6b5f50"/><polygon points="296,268 317,250 338,268" fill="#b4532f"/>
+        <rect x="340" y="276" width="28" height="22" fill="#efe3cc" stroke="#6b5f50"/><polygon points="337,276 354,262 371,276" fill="#9c4627"/>
+        <rect x="372" y="250" width="16" height="46" fill="#efe3cc" stroke="#6b5f50"/><polygon points="370,250 380,222 390,250" fill="#1f2f44"/>
+        <rect x="262" y="282" width="30" height="20" fill="#efe3cc" stroke="#6b5f50"/><polygon points="258,282 277,268 296,282" fill="#b4532f"/></g>
+        <g transform="translate(505 255)"><rect x="-8" y="0" width="16" height="34" fill="#efe3cc" stroke="#6b5f50"/><polygon points="-10,0 0,-10 10,0" fill="#6b5f50"/><g stroke="#6b5f50" stroke-width="4"><line x1="0" y1="-4" x2="0" y2="-34"/><line x1="0" y1="-4" x2="28" y2="-4"/><line x1="0" y1="-4" x2="0" y2="26"/><line x1="0" y1="-4" x2="-28" y2="-4"/></g></g>
+        <g fill="#6f8a3a"><circle cx="660" cy="270" r="16"/><circle cx="684" cy="262" r="18"/><circle cx="708" cy="272" r="15"/><circle cx="140" cy="272" r="13"/><circle cx="160" cy="266" r="15"/></g>
+        <g id="hots"></g>
+      </svg>
+      <div class="hotinfo tl-detail" id="hotInfo"><b>Kies een punt.</b><p class="small muted">Elk punt toont een soort plaatsnaam met voorbeelden uit ons taalgebied.</p></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>🎯 Mini-check: natuurlijk of kunstmatig?</h3>
+    <div class="ex" id="ex-plaats"></div>
+  </div>
+
+  <div class="card">
+    <h3>Van plaatsnaam naar woord (en terug)</h3>
+    <div class="grid3">
+      <div class="box info" style="margin:0"><b class="lbl">Geoniem</b>Een soortnaam die teruggaat op een plaatsnaam: <i>bikini</i>, <i>hamburger</i>.</div>
+      <div class="box info" style="margin:0"><b class="lbl">Eponiem</b>Een soortnaam die teruggaat op een persoonsnaam: <i>zeppelin</i>, <i>fosburyflop</i>.</div>
+      <div class="box info" style="margin:0"><b class="lbl">Genericide</b>Een merknaam wordt een gewoon woord: een <i>pamper</i> voor ‘wegwerpluier’.</div>
+    </div>
+  </div>
+  <div class="station-end" data-end="2"></div>
+</section>
+
+<!-- ========== 3 FAMILIENAMEN ========== -->
+<section class="station" id="st3" data-title="Familienamen">
+  <div class="st-head"><div class="st-num">3</div><div><div class="kicker">Station 3 · antroponymie</div><h2>Familienamen: van toenaam tot burgerlijke stand</h2><p class="lead">De familienaam die jij draagt, is het resultaat van een proces van eeuwen. Klik door de tijdlijn.</p></div></div>
+
+  <div class="card">
+    <div class="tl" id="tl"></div>
+    <div class="tl-detail" id="tlDetail"></div>
+  </div>
+
+  <div class="box let"><b class="lbl">Denkfout: De Bakker als voorteken?</b>Je voorouder heette De Bakker <b>omdat</b> hij bakker was, niet omgekeerd. Sinds de burgerlijke stand de naam vastlegde, wordt hij ongewijzigd doorgegeven. Zo zegt hij vandaag niets meer over het beroep van de drager.</div>
+
+  <h3 style="margin-top:28px">De vijf benoemingsmotieven</h3>
+  <p class="muted">Het <b>benoemingsmotief</b> is de reden waarom de eerste drager die naam kreeg. Klik op een kaart om ze om te draaien.</p>
+  <div class="grid5" id="motiefCards"></div>
+  <div class="box tip"><b class="lbl">Let op: meerduidig</b>Sommige namen passen in twee groepen. <i>Van Damme</i> kan verwijzen naar de gemeente Damme (herkomst) of naar een willekeurige dam (woonplaats). <i>De Leeuw</i> kan een eigenschap zijn (sterk als een leeuw), maar ook teruggaan op een huisnaam. Het bewijs zit in oude bronnen.</div>
+
+  <div class="card" style="margin-top:22px">
+    <h3>🔎 De naamontleder</h3>
+    <p class="small">Typ een familienaam. De ontleder doet een <b>eerste gok</b> op basis van de vorm van de naam. Probeer: <i>Peeters, Mariën, De Smet, Vandenbroucke, Brusselmans, De Groote, Wittebrood, Ooms</i>…</p>
+    <div class="analyser"><input id="anInput" placeholder="bv. Vanderlinden" aria-label="Familienaam"><button class="btn" id="anBtn">Ontleed</button></div>
+    <div class="verdict" id="anOut"></div>
+  </div>
+
+  <div class="card">
+    <h3>🗺️ Motiefgeografie: waar wint welk motief?</h3>
+    <p class="small">Op basis van de <b>100 frequentste familienamen per provincie</b> (Belgische namen uit 1987, Nederlandse uit 1993; naar Marynissen). Klik op een provincie.</p>
+    <div class="legend"><span><i style="background:var(--terra)"></i>afstammingsnamen (patroniem/metroniem)</span><span><i style="background:var(--blue)"></i>woonplaatsnamen</span><span><i style="background:var(--gold)"></i>beroepsnamen</span><span><i style="background:var(--olive)"></i>herkomstnamen</span></div>
+    <div class="grid2" style="align-items:start">
+      <div><div class="tilemap" id="tilemap"></div><p class="small muted">Schematische tegelkaart: de vakjes liggen ongeveer zoals de provincies, maar het zijn geen echte grenzen.</p></div>
+      <div>
+        <div class="tl-detail" id="tileInfo"><b>Klik op een provincie.</b></div>
+        <div class="box weet"><b class="lbl">Wat valt op?</b>
+          <ul style="margin:0;padding-left:18px" class="small">
+            <li>In <b>Vlaanderen</b> winnen de <b>afstammingsnamen</b>, en hun aandeel daalt van oost naar west. In West-Vlaanderen winnen de woonplaatsnamen.</li>
+            <li><b>Belgisch en Nederlands Limburg</b> scoren allebei 56% afstammingsnamen: een teken van de historische eenheid van die regio.</li>
+            <li><b>Noord-Brabant</b> is de enige provincie waar <b>herkomstnamen</b> winnen.</li>
+            <li><b>Eigenschapsnamen</b> zijn nergens de grootste groep.</li>
+          </ul></div>
+      </div>
+    </div>
+    <h4 style="margin-top:14px">🎯 Check je kaartlezen</h4>
+    <div class="ex" id="ex-geo"></div>
+  </div>
+
+  <div class="card">
+    <h3>Eén naam, veel vormen</h3>
+    <p class="small">De <i>Atlas van familienamen in het Nederlandse taalgebied</i> (AFNeT, Ann Marynissen) brengt vier soorten variatie in kaart:</p>
+    <div class="grid2">
+      <div class="box info" style="margin:0"><b class="lbl">Spelling (orthografie)</b><i>Desmet</i> / <i>De Smet</i> · c of k in namen met <i>Klaas</i></div>
+      <div class="box info" style="margin:0"><b class="lbl">Klank (fonologie)</b>aa / ee in de beroepsnaam <i>kramer</i> · o / u in namen met <i>wolf</i></div>
+      <div class="box info" style="margin:0"><b class="lbl">Vorm (morfologie)</b><i>Willems</i> / <i>Willemsen</i> · <i>Dekker</i> / <i>De Dekker</i> / <i>Dekkers</i></div>
+      <div class="box info" style="margin:0"><b class="lbl">Woord (lexicon)</b><i>burger</i> / <i>poorter</i> · <i>kikker</i> / <i>puit</i></div>
+    </div>
+  </div>
+  <div class="station-end" data-end="3"></div>
+</section>
+
+<!-- ========== 4 VOORNAMEN ========== -->
+<section class="station" id="st4" data-title="Voornamen">
+  <div class="st-head"><div class="st-num">4</div><div><div class="kicker">Station 4 · antroponymie</div><h2>De evolutie van voornamen</h2><p class="lead">Voor- en familienamen horen bij elkaar: voornamen vormden vaak de basis van latere familienamen (Peeters, Janssens…). De geschiedenis van onze voornamen valt in vier periodes uiteen.</p></div></div>
+
+  <div class="grid2" style="align-items:center">
+    <div class="wheel" id="wheel">
+      <button data-p="0"><span>⚔️</span>I. Germaans<small>tot de 12de eeuw</small></button>
+      <button data-p="1"><span>⛪</span>II. Middeleeuws<small>vanaf de 12de/13de eeuw</small></button>
+      <button data-p="3"><span>🌍</span>IV. Modern<small>vanaf de jaren 1960</small></button>
+      <button data-p="2"><span>🌳</span>III. Stabiliteit<small>tot de Tweede Wereldoorlog</small></button>
+      <div class="hub">Voornamen<br>door de eeuwen</div>
+    </div>
+    <div class="tl-detail" id="wheelInfo" style="min-height:260px"><b>Klik op een periode in het wiel.</b></div>
+  </div>
+
+  <div class="card" style="margin-top:22px">
+    <h3>Eén persoon, veel namen</h3>
+    <div class="grid3 small">
+      <div><b>Voornaam</b>: de officiële naam die je bij je geboorte krijgt en waarmee je meestal aangesproken wordt.</div>
+      <div><b>Doopnaam</b>: de naam bij het doopsel, soms anders dan de officiële voornaam.</div>
+      <div><b>Roepnaam</b>: de naam waarmee je echt aangesproken wordt, vaak verkort: <i>Fluppe</i> voor Filip.</div>
+      <div><b>Koosnaam</b> (troetel-, vleinaam, hypocoristicon): <i>Mimietje</i> voor Marie.</div>
+      <div><b>Augmentatief</b>: een naam die ‘groter’ klinkt: <i>Berten</i> voor Robert.</div>
+      <div><b>Bijnaam</b>: een niet-officiële naam om iemand te typeren.</div>
+      <div><b>Erenaam</b>: een eerbetoon: <i>De Kannibaal</i> voor Eddy Merckx.</div>
+      <div><b>Totemnaam</b>: bij scouts en gidsen, een diernaam met een eigenschap: <i>Blijmoedige Koala</i>.</div>
+      <div><b>Pseudoniem / pennaam / schermnaam</b>: zelfgekozen namen voor het publieke of online leven.</div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>🎯 Welke naamsoort is dit?</h3>
+    <div class="ex" id="ex-vnsoort"></div>
+  </div>
+  <div class="box tip"><b class="lbl">Zelf zoeken</b>Hoe populair is een voornaam vandaag? Kijk bij <a href="https://statbel.fgov.be/nl/themas/bevolking/namen-en-voornamen" target="_blank" rel="noopener">Statbel</a> (België) en in de <a href="https://nvb.meertens.knaw.nl/" target="_blank" rel="noopener">Nederlandse Voornamenbank</a>. In station 8 ga je er zelf mee aan de slag.</div>
+  <div class="station-end" data-end="4"></div>
+</section>
+
+<!-- ========== 5 LEESATELIER ========== -->
+<section class="station" id="st5" data-title="Leesatelier">
+  <div class="st-head"><div class="st-num">5</div><div><div class="kicker">Station 5 · leesopdracht</div><h2>Leesatelier: namen zijn geen toeval</h2><p class="lead">Je leest een informatieve tekst in twee rondes. Eerst <b>oriënterend</b>, dan <b>intensief</b>. Daarna beantwoord je vragen en schrijf je een samenvatting.</p></div></div>
+
+  <div class="card">
+    <h3>Stap 1 · Oriënterend lezen (2 minuten)</h3>
+    <div class="step"><span class="s">Doe</span><div>Lees <b>alleen</b> de titel, de inleiding (alinea 1), de tussentitels en het slot (alinea 10). Wat is volgens jou de hoofdvraag van de tekst?</div></div>
+    <textarea data-save="lees-voorspel" placeholder="Ik denk dat de tekst gaat over…"></textarea>
+  </div>
+
+  <article class="reading" id="leestekst">
+    <h2 style="color:var(--ink)">Namen zijn geen toeval</h2>
+    <p class="lead-in">Wat vertellen plaatsnamen, familienamen en voornamen over wie we zijn en waar we vandaan komen?</p>
+    <div class="al"><span class="n">1</span><p>Namen zijn veel meer dan etiketten. Naamkundigen beschouwen ze als <b>taalkundige monumenten</b>: wie een naam ontrafelt, krijgt een inkijk in de geschiedenis, de geografie en de sociale ontwikkeling van een gemeenschap. De naamkunde of onomastiek steunt op twee grote pijlers: de toponymie en de antroponymie.</p></div>
+    <h3>De bodem spreekt</h3>
+    <div class="al"><span class="n">2</span><p>De toponymie of plaatsnaamkunde spoort plaatsnamen op, verklaart ze en bestudeert hoe ze verspreid zijn. Ze is een hulpwetenschap die nauw samenwerkt met de archeologie en de historische geografie. <b>In tegenstelling tot wat vaak gedacht wordt</b>, baseert de toponymie zich niet op volksverhalen of sagen. Ze is een exacte wetenschap die op zoek gaat naar de oudste schriftelijke versie van een naam, omdat die taalkundig het meest doorzichtig is.</p></div>
+    <div class="al"><span class="n">3</span><p>Zo’n analyse levert veel kennis op. Plaatsnamen vertellen iets over het landschap: de bodemgesteldheid, het reliëf, de waterlopen en de oorspronkelijke plantengroei. Ze verraden ook de menselijke geschiedenis: oude beroepen, vormen van nederzettingen, activiteiten en de persoonsnamen van vroegere bewoners. Ten slotte tonen ze iets van cultuur en religie, <b>bijvoorbeeld</b> plaatselijke heiligen, en van de ontwikkeling van de taal. Binnen de toponymie bestaan specialisaties: hydroniemen zijn namen van wateren en waterlopen, hodoniemen namen van straten en wegen, oroniemen namen van bergen en heuvels. Hoewel Nederland en België een rijke traditie hebben, onder meer via het Meertens Instituut, wordt de plaatsnaamkunde vandaag aan instituten veel minder beoefend dan vroeger.</p></div>
+    <h3>Van één naam tot burgerlijke stand</h3>
+    <div class="al"><span class="n">4</span><p>De antroponymie bestudeert de oorsprong van voor- en achternamen. De familienaamkunde is een jongere discipline, maar voornamen en familienamen zijn historisch onlosmakelijk verbonden: voornamen vormden vaak de basis voor latere familienamen. Oorspronkelijk gebruikte men maar één naam. <b>Door bevolkingsgroei en verstedelijking</b> ontstond de noodzaak om mensen beter van elkaar te onderscheiden. Zo kwamen er toenamen bij, zoals ‘Jan Pietersen’ of ‘De Smid’.</p></div>
+    <div class="al"><span class="n">5</span><p>Vanaf de late middeleeuwen werden die toenamen erfelijk. Dat proces verspreidde zich van zuid naar noord, van de stad naar het platteland en van de elite naar de lagere standen. In 1811 werd de familienaam onder invloed van Napoleon officieel vastgelegd in de burgerlijke stand. Wie nog geen naam had, moest er een aannemen. Vanaf dan kon een familienaam alleen nog veranderen via een Koninklijk Besluit. Toch bleven in de noordelijke provincies vadersnamen nog lang in gebruik, zelfs als er al een officiële familienaam geregistreerd was.</p></div>
+    <h3>Van Adelbert tot Kevin</h3>
+    <div class="al"><span class="n">6</span><p>De geschiedenis van onze voornamen valt grofweg in vier periodes uiteen. De oudste laag zijn de <b>Germaanse namen</b>. Ze bestaan uit twee naamstammen, waarbij de tweede stam het geslacht bepaalt, <b>bijvoorbeeld</b> Adelbert (adel + bert) en Gertrud (ger + trud). Omdat ouders stammen van familieleden combineerden, was er veel variatie.</p></div>
+    <div class="al"><span class="n">7</span><p><b>Vanaf de twaalfde en dertiende eeuw</b> verdrongen uitheemse <b>heiligennamen</b> de Germaanse namen. Oorzaken waren de kruistochten, de invloed van de kerk, de bedelmonniken en vooral een sterke opbloei van de heiligenverering. Het was deels een modeverschijnsel dat zich via de steden en de elite verspreidde: mensen kozen zulke namen ook uit statusoverwegingen. <b>Ondanks</b> hun afkeer van heiligenverering bleven protestanten namen als Jan, Pieter en Klaasje geven, omdat die al ingeburgerd waren.</p></div>
+    <div class="al"><span class="n">8</span><p>Daarna volgde een lange <b>periode van stabiliteit</b>, die duurde tot de Tweede Wereldoorlog. Strikte vernoemingsregels hielden de voorraad namen klein. Men geloofde dat met een naam ook eigenschappen van de vernoemde persoon overgingen. De eerste zoon werd vernoemd naar de vader van de vader, de eerste dochter naar de moeder van de vader, met streekgebonden variaties. Daarna volgden de grootouders langs de andere kant en vervolgens ooms en tantes. Overleden familieleden kregen voorrang: ‘dood gaat voor levend’.</p></div>
+    <div class="al"><span class="n">9</span><p><b>Vanaf de jaren zestig</b> brak men met die traditie. De roepnaam werd vaak de officiële naam, en traditionele namen als Johannes en Maria verdwenen naar de achtergrond of werden alleen nog als tweede of derde naam gegeven. Er kwam een grote instroom van Engelse namen (Kevin, Kelly), Franse namen (Michelle) en internationale namen (Linda, Mark). De variatie is enorm toegenomen, en vernoemen naar familie is niet langer de norm.</p></div>
+    <h3>Een spiegel</h3>
+    <div class="al"><span class="n">10</span><p><b>Kortom</b>, namen zijn een spiegel van de maatschappij. Plaatsnamen zijn functioneel: ze beschrijven het landschap. Persoonsnamen zijn modegevoelig en sociaal: ze tonen hoe mensen samenleven en wat ze belangrijk vinden.</p></div>
+  </article>
+
+  <div class="card">
+    <h3>Stap 2 · Vragen bij de tekst</h3>
+    <p class="small muted">Lees intensief. Zoek telkens het antwoord terug in de genummerde alinea’s.</p>
+    <h4>A. Inhoud en hoofdgedachte</h4>
+    <div class="ex" id="ex-lees1"></div>
+    <h4 style="margin-top:20px">B. Juist of fout?</h4>
+    <div class="ex" id="ex-lees2"></div>
+    <h4 style="margin-top:20px">C. Woordenschat: achterhaal de betekenis uit de context</h4>
+    <div class="ex" id="ex-lees3"></div>
+    <h4 style="margin-top:20px">D. Signaalwoorden: welk verband geven ze aan?</h4>
+    <p class="small">De vetgedrukte woorden in de tekst zijn signaalwoorden.</p>
+    <div class="ex" id="ex-lees4"></div>
+  </div>
+
+  <div class="card">
+    <h3>Stap 3 · Kernzinnen</h3>
+    <p class="small">Schrijf per tussentitel <b>in één zin</b> de kernboodschap, in je eigen woorden.</p>
+    <div class="grid2">
+      <div><b>De bodem spreekt</b><textarea data-save="kern1"></textarea></div>
+      <div><b>Van één naam tot burgerlijke stand</b><textarea data-save="kern2"></textarea></div>
+      <div><b>Van Adelbert tot Kevin</b><textarea data-save="kern3"></textarea></div>
+      <div><b>Een spiegel</b><textarea data-save="kern4"></textarea></div>
+    </div>
+    <details class="acc"><summary>Vergelijk met een modelantwoord</summary><div class="in small">
+      <p><b>De bodem spreekt:</b> Toponymie is een exacte wetenschap die via de oudste geschreven vorm van plaatsnamen iets leert over landschap, geschiedenis en cultuur.</p>
+      <p><b>Van één naam tot burgerlijke stand:</b> Door bevolkingsgroei ontstonden toenamen, die vanaf de late middeleeuwen erfelijk werden en in 1811 officieel werden vastgelegd.</p>
+      <p><b>Van Adelbert tot Kevin:</b> Voornamen evolueerden van Germaanse namen via heiligennamen en strikte vernoemingsregels naar de vrije, internationale keuzes van vandaag.</p>
+      <p><b>Een spiegel:</b> Namen weerspiegelen de maatschappij: plaatsnamen het landschap, persoonsnamen mode en sociale verhoudingen.</p></div></details>
+  </div>
+
+  <div class="card">
+    <h3>Stap 4 · Schrijf een samenvatting</h3>
+    <p class="small">Vat de tekst samen in een <b>doorlopende tekst van 80 tot 120 woorden</b>. Gebruik je kernzinnen. Begin met het onderwerp, volg de volgorde van de tekst en gebruik signaalwoorden.</p>
+    <div id="w-samenvatting"></div>
+    <ul class="check small"><li>Ik noem het onderwerp en de hoofdgedachte.</li><li>Ik behandel elk deel van de tekst (toponymie, familienamen, voornamen).</li><li>Ik schrijf in mijn eigen woorden, zonder voorbeelden te kopiëren.</li><li>Ik gebruik signaalwoorden (eerst, daarna, door, kortom…).</li></ul>
+    <details class="acc"><summary>Toon een modelsamenvatting (pas na het schrijven!)</summary><div class="in small"><p>De tekst legt uit dat namen een spiegel van de maatschappij zijn. De toponymie bestudeert plaatsnamen wetenschappelijk via hun oudste geschreven vorm. Zo leren we iets over het vroegere landschap, de geschiedenis en de cultuur. De antroponymie onderzoekt persoonsnamen. Door bevolkingsgroei kregen mensen eerst toenamen. Vanaf de late middeleeuwen werden die erfelijk, en in 1811 legde de burgerlijke stand ze vast. Voornamen evolueerden in vier periodes: eerst Germaanse namen, daarna heiligennamen, vervolgens een lange tijd met strikte vernoemingsregels en sinds de jaren zestig vrije en internationale keuzes. Kortom, plaatsnamen beschrijven het landschap, terwijl persoonsnamen tonen wat mensen modieus en sociaal belangrijk vinden. <i>(108 woorden)</i></p></div></details>
+  </div>
+  <div class="station-end" data-end="5"></div>
+</section>
+
+<!-- ========== 6 EXPERTGROEP ========== -->
+<section class="station" id="st6" data-title="Expertgroep">
+  <div class="st-head"><div class="st-num">6</div><div><div class="kicker">Station 6 · Naam &amp; mens</div><h2>Nomen est omen? Word expert</h2><p class="lead">Bepaalt je naam wie je bent? Je onderzoekt één betekenislaag van namen grondig en wordt daarin expert. Daarna geef je een <b>privéles van 15 minuten</b> aan je privélesgroep.</p></div></div>
+
+  <div class="card">
+    <h3>Zo werkt het</h3>
+    <div class="grid2 small">
+      <div class="step"><span class="s">1</span><div><b>Kies je expertgroep</b> (je leraar verdeelt de kleuren).</div></div>
+      <div class="step"><span class="s">2</span><div><b>Bestudeer je dossier</b> en vul de werkfiche in (±35 min).</div></div>
+      <div class="step"><span class="s">3</span><div><b>Geef je privéles</b> van 15 minuten. Na 15 minuten gaat de bel!</div></div>
+      <div class="step"><span class="s">4</span><div><b>De Ultieme Namentest</b> (Oefenzone), zonder notities. Elke juiste vraag levert je privélesgroep een punt op.</div></div>
+    </div>
+  </div>
+
+  <h3>Kies je expertgroep</h3>
+  <div class="groups">
+    <button class="gcard g1" data-group="1"><span class="ic">📜</span><span class="small">Expertgroep 1 · rood</span><h3>Historische betekenis</h3><span class="small">Wanneer en waarom zijn familienamen ontstaan?</span></button>
+    <button class="gcard g2" data-group="2"><span class="ic">💭</span><span class="small">Expertgroep 2 · groen</span><h3>Emotionele betekenis</h3><span class="small">Hoe beïnvloedt je naam de levenskeuzes die je maakt?</span></button>
+    <button class="gcard g3" data-group="3"><span class="ic">🤝</span><span class="small">Expertgroep 3 · blauw</span><h3>Sociale betekenis</h3><span class="small">Welke impact heeft je naam op de kansen die je krijgt?</span></button>
+  </div>
+  <p class="small muted" id="groupHint" style="margin-top:10px">Nog geen groep gekozen. Klik op een kleur.</p>
+
+  <!-- DOSSIER 1 -->
+  <div class="card dossier d1" id="dos1" hidden>
+    <span class="tag terra">Expertgroep 1</span><h2 style="margin-top:8px">📜 Historische betekenis</h2>
+    <div class="box let"><b class="lbl">Lesdoelen voor jouw leerlingen</b>Na jouw les kunnen ze:
+      <ul style="margin:4px 0 0;padding-left:18px"><li>uitleggen <b>wanneer, waarom en hoe</b> familienamen ontstonden en welke <b>regionale verschillen</b> er waren;</li><li>de begrippen <b>toenaam, patroniem, metroniem, beroepsnaam, herkomst- of woonplaatsnaam, eigenschapsnaam, overerfbaar</b> en <b>burgerlijke stand</b> uitleggen met een voorbeeld;</li><li>uitleggen waarom een naam als <i>De Bakker</i> <b>geen voorteken</b> was.</li></ul></div>
+    <div class="dos-body" data-core="1">
+      <h3>Kernuitleg</h3>
+      <p><b>1. Eén naam volstond.</b> Bij de Germanen had iedereen één, vaak betekenisvolle naam (<b>eennaamssysteem</b>). <i>Baldwin</i> = <i>bald</i> ‘moedig’ + <i>win</i> ‘vriend’ = ‘moedige vriend’.</p>
+      <p><b>2. De twaalfde eeuw: toenamen.</b> Door bevolkingsgroei en de groei van steden waren er te veel mensen met dezelfde voornaam. Daarom kreeg iemand er spontaan een <b>toenaam</b> bij: een extra naam om hem van anderen te onderscheiden. Dat gebeurde het vroegst in het <b>graafschap Vlaanderen</b>, vooral <b>in de steden</b>. Zo’n toenaam kon naar de vader verwijzen (Jan Pieterszoon), naar het beroep (Jan de Smid), naar de woonplaats (Jan van der Linden) of naar een eigenschap (Jan de Groote).</p>
+      <p><b>3. Late middeleeuwen: de toenaam wordt erfelijk.</b> Een toenaam was eerst persoonlijk. <i>Klaas, de zoon van Peter Bernhardszoon</i>, heette <i>Klaas Peterszoon</i>: de naam veranderde dus elke generatie. Geleidelijk werd de toenaam <b>overerfbaar</b>: kinderen kregen dezelfde naam als hun vader. Zo ontstond de <b>familienaam</b>. Dat ging van <b>zuid naar noord</b>, van <b>stad naar platteland</b> en van de <b>elite naar de lagere standen</b>.</p>
+      <p><b>4. 1795 / 1811: de burgerlijke stand.</b> Onder Frans bestuur werd de <b>burgerlijke stand</b> ingevoerd: in onze zuidelijke gewesten rond 1795, in Nederland in 1811 onder Napoleon. De familienaam werd officieel vastgelegd; wie er nog geen had, moest er een aannemen. Sindsdien wordt de naam onveranderd doorgegeven.</p>
+      <div class="box weet"><b class="lbl">Regionale verschillen</b>In het zuiden (Vlaanderen) waren familienamen veel vroeger vast dan in het noorden. In de noordelijke provincies bleven vadersnamen (patroniemen) nog lang in gebruik, zelfs na 1811.</div>
+    </div>
+    <div class="dos-work">
+      <h3>Werkfiche · breng de structuur in kaart</h3>
+      <p class="small">Zet de ontwikkeling op een tijdlijn. Noteer per periode wat er veranderde, waarom, en een voorbeeld.</p>
+      <div class="tabscroll"><table class="tab"><tr><th>Periode</th><th>Wat veranderde er?</th><th>Waarom?</th><th>Voorbeeld</th></tr>
+        <tr><td><b>Germanen</b></td><td><textarea data-save="e1-g-w"></textarea></td><td><textarea data-save="e1-g-y"></textarea></td><td><textarea data-save="e1-g-v"></textarea></td></tr>
+        <tr><td><b>Twaalfde eeuw</b></td><td><textarea data-save="e1-12-w"></textarea></td><td><textarea data-save="e1-12-y"></textarea></td><td><textarea data-save="e1-12-v"></textarea></td></tr>
+        <tr><td><b>Late middeleeuwen</b></td><td><textarea data-save="e1-lm-w"></textarea></td><td><textarea data-save="e1-lm-y"></textarea></td><td><textarea data-save="e1-lm-v"></textarea></td></tr>
+        <tr><td><b>1795 / 1811</b></td><td><textarea data-save="e1-bs-w"></textarea></td><td><textarea data-save="e1-bs-y"></textarea></td><td><textarea data-save="e1-bs-v"></textarea></td></tr></table></div>
+      <details class="acc"><summary>Vergelijk met een voorbeeldantwoord</summary><div class="in small">
+        <p><b>Germanen:</b> iedereen heeft één, betekenisvolle naam · kleine gemeenschappen, één naam volstaat · <i>Baldwin</i> ‘moedige vriend’.</p>
+        <p><b>Twaalfde eeuw:</b> er komt een toenaam bij, eerst in de Vlaamse steden · bevolkingsgroei en steden: te veel gelijke voornamen · <i>Jan de Smid, Klaas Peterszoon</i>.</p>
+        <p><b>Late middeleeuwen:</b> de toenaam wordt erfelijk, dus een familienaam · eerst bij de elite en in de steden, daarna overal · <i>Peeters</i>: de kinderen van een Peter.</p>
+        <p><b>1795/1811:</b> de burgerlijke stand legt de naam officieel vast · de overheid registreert iedereen eenduidig · <i>De Bakker</i> blijft De Bakker, ook als niemand nog bakker is.</p></div></details>
+      <h3 style="margin-top:20px">Extra opdracht · een sprekend voorbeeld per motief</h3>
+      <p class="small">Zoek in de Namendatabank van het <a href="https://www.namenloket.be" target="_blank" rel="noopener">Namenloket</a> of op <a href="https://familienaam.be/" target="_blank" rel="noopener">familienaam.be</a> een voorbeeld per benoemingsmotief. Gebruik geen namen van klasgenoten zonder hun toestemming.</p>
+      <div class="tabscroll"><table class="tab"><tr><th>Benoemingsmotief</th><th>Voorbeeld uit de databank</th><th>Wat betekent de naam?</th></tr>
+        <tr><td>Patroniem (vadersnaam)</td><td><textarea data-save="e1-m1a"></textarea></td><td><textarea data-save="e1-m1b"></textarea></td></tr>
+        <tr><td>Metroniem (moedersnaam)</td><td><textarea data-save="e1-m2a"></textarea></td><td><textarea data-save="e1-m2b"></textarea></td></tr>
+        <tr><td>Beroepsnaam</td><td><textarea data-save="e1-m3a"></textarea></td><td><textarea data-save="e1-m3b"></textarea></td></tr>
+        <tr><td>Herkomst- of woonplaatsnaam</td><td><textarea data-save="e1-m4a"></textarea></td><td><textarea data-save="e1-m4b"></textarea></td></tr>
+        <tr><td>Eigenschapsnaam</td><td><textarea data-save="e1-m5a"></textarea></td><td><textarea data-save="e1-m5b"></textarea></td></tr></table></div>
+      <div class="box tip"><b class="lbl">Sneller klaar? Sprinteropdracht</b>Waar wonen de dragers van je voorbeeldnamen? Zoek op <a href="https://familienaam.be/" target="_blank" rel="noopener">familienaam.be</a> of in de <a href="https://www.cbgfamilienamen.nl/nfb/index.php" target="_blank" rel="noopener">Nederlandse Familienamenbank</a> waar een van je namen het meest voorkomt. Kun je dat verklaren met wat je over benoemingsmotieven leerde?</div>
+    </div>
+  </div>
+
+  <!-- DOSSIER 2 -->
+  <div class="card dossier d2" id="dos2" hidden>
+    <span class="tag olive">Expertgroep 2</span><h2 style="margin-top:8px">💭 Emotionele betekenis</h2>
+    <div class="box weet"><b class="lbl">Lesdoelen voor jouw leerlingen</b>Na jouw les kunnen ze:
+      <ul style="margin:4px 0 0;padding-left:18px"><li>uitleggen in welke mate er <b>wetenschappelijk bewijs</b> is voor nominatief determinisme;</li><li>uitleggen <b>hoe dat onderzocht wordt</b> en waarom zulk onderzoek moeilijk is: welke <b>andere verklaringen</b> zijn er?</li><li>zelf een <b>aptoniem</b> bedenken dat bij hen past;</li><li>de begrippen <b>nominatief determinisme, naamlettereffect, impliciet egotisme, aptoniem, (naamdwang)</b> en <b>illusoire correlatie</b> uitleggen met een voorbeeld.</li></ul></div>
+    <div class="dos-body" data-core="2">
+      <h3>Kernbegrippen</h3>
+      <div class="grid2 small">
+        <div class="box info" style="margin:0"><b class="lbl">Aptoniem</b>Een naam die opvallend goed past bij beroep, hobby of eigenschap: een bakker die <i>De Bakker</i> heet, sprinter <i>Usain Bolt</i> (<i>bolt</i> = ‘wegschieten’), een kraamverzorgster die <i>Naaktgeboren</i> heet. Een grappige <b>toevalligheid</b>.</div>
+        <div class="box info" style="margin:0"><b class="lbl">Nominatief determinisme (naamdwang)</b>Het idee dat je naam <b>mee bepaalt</b> welke keuzes je maakt (beroep, woonplaats). Daar zou wél een verband achter zitten. Onderzoekers zijn het er <b>niet over eens</b> of dat effect echt bestaat.</div>
+        <div class="box info" style="margin:0"><b class="lbl">Naamlettereffect</b>De neiging om de letters uit je eigen naam, vooral je initialen, <b>mooier</b> te vinden dan andere letters. Ontdekt door de Belgische psycholoog Jozef Nuttin (1985).</div>
+        <div class="box info" style="margin:0"><b class="lbl">Impliciet egotisme</b>Je voelt je onbewust aangetrokken tot dingen die op <b>jezelf</b> lijken, zoals je naam of je initialen. Het is de verklaring achter nominatief determinisme.</div>
+        <div class="box info" style="margin:0;grid-column:1/-1"><b class="lbl">Illusoire correlatie</b>Je ziet een verband dat er niet (of veel zwakker) is. Opvallende aptoniemen onthouden we, maar de duizenden bakkers die <i>niet</i> De Bakker heten, vallen ons niet op.</div>
+      </div>
+      <h3 style="margin-top:18px">De studies</h3>
+      <p><b>Pelham e.a.</b> vonden dat mannen die <i>Dennis</i> heten vaker <i>dentist</i> (tandarts) waren dan mannen die <i>Walter</i> heten. Hun verklaring is impliciet egotisme. <b>Simonsohn</b> wees op andere verklaringen: Dennis en Walter waren populair in <b>verschillende generaties</b>, dus leeftijd kan het verschil verklaren.</p>
+      <p><b>Anseel en Duyck</b> onderzochten Belgische werknemers. Mensen bleken iets vaker te werken voor een bedrijf waarvan de naam met dezelfde letter begint als hun eigen naam. Kritiek: het verband kan <b>omgekeerd</b> lopen. Een bedrijf als <i>Verstraeten</i> is naar de familie genoemd, en familieleden werken er.</p>
+      <p><b>Zwebner e.a.</b> stelden vast dat mensen de voornaam van een onbekende vaker dan bij toeval juist aan diens gezicht koppelen: het <b>naam-gezichteffect</b>. Ze concludeerden dat we ‘naar onze naam toe groeien’. Maar naam én uiterlijk kunnen allebei samenhangen met <b>sociale achtergrond</b>.</p>
+      <div class="box tip"><b class="lbl">Nieuw onderzoek uit België · Verheyen, Van den Berckt &amp; Heyman (2026)</b>Studenten zagen gelijkaardige foto’s en kozen telkens tussen twee voornamen. Soms stond de echte naam erbij, soms de naam van een <b>broer of zus</b>, want die krijgen hun naam van dezelfde ouders, met dezelfde achtergrond. Resultaat: <b>geen overtuigend bewijs</b> voor het naam-gezichteffect. De deelnemers kozen iets vaker juist dan bij toeval, maar dat verschil was niet significant. Het effect lijkt vooral op te duiken als de mensen op de foto’s sterk van elkaar verschillen.</div>
+    </div>
+    <div class="dos-work">
+      <h3>Werkfiche · zet elke studie in het schema</h3>
+      <div class="ex" id="ex-studies"></div>
+      <h3 style="margin-top:20px">Extra opdracht · bedenk je eigen aptoniem</h3>
+      <div class="grid2">
+        <div><b>Mijn hobby, droomberoep of karaktertrek</b><input id="aptIn" class="pill" style="width:100%;font-weight:400;padding:10px 14px" placeholder="bv. voetbal, koken, dieren, muziek"><div class="btnrow"><button class="btn small" id="aptBtn">Inspireer me ✨</button></div><div id="aptOut" class="wordout" style="font-size:1.3rem"></div></div>
+        <div><b>Mijn aptoniem</b><textarea data-save="apt-naam" placeholder="Welke naam zou perfect bij jou passen?"></textarea><b>Waarom past die naam bij mij?</b><textarea data-save="apt-waarom"></textarea><b>Opdracht voor mijn leerlingen?</b><textarea data-save="apt-opdracht" placeholder="Hoe gebruik je dit in je les om illusoire correlatie uit te leggen?"></textarea></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOSSIER 3 -->
+  <div class="card dossier d3" id="dos3" hidden>
+    <span class="tag blue">Expertgroep 3</span><h2 style="margin-top:8px">🤝 Sociale betekenis</h2>
+    <div class="box info"><b class="lbl">Lesdoelen voor jouw leerlingen</b>Na jouw les kunnen ze:
+      <ul style="margin:4px 0 0;padding-left:18px"><li>uitleggen hoe voor- en familienamen een <b>sociale betekenis</b> krijgen, dat die betekenis kan <b>veranderen</b> en welke <b>gevolgen</b> ze kan hebben;</li><li>uitleggen <b>hoe onderzocht wordt</b> of de sociale betekenis van een naam tot discriminatie leidt;</li><li>het verschil tussen een <b>vooroordeel</b> en een <b>feit</b> verwoorden en hun eigen automatische associaties in vraag stellen;</li><li>de begrippen <b>sociale betekenis, associatie, stereotype, discriminatie</b> en <b>praktijktest</b> uitleggen met een voorbeeld.</li></ul></div>
+    <div class="box let"><b class="lbl">Respect</b>Dit thema gaat over vooroordelen, pesten en discriminatie. Praat er respectvol over: geen grappen ten koste van groepen en geen namen van klasgenoten.</div>
+    <div class="dos-body" data-core="3">
+      <h3>Kernuitleg</h3>
+      <p><b>Sociale betekenis.</b> Mensen koppelen beelden aan namen. Hoor je <i>Kaat</i>, dan denken sommigen meteen aan hoogopgeleide ouders. Namen als <i>Cindy</i> of <i>Johnny</i> roepen andere beelden op. Die <b>associaties</b> weerspiegelen sociale, economische of culturele opvattingen. Het zijn <b>aannames, geen feiten</b>.</p>
+      <p><b>Die betekenis verandert.</b> Namen komen op, pieken en doven weer uit. Jonge ouders maken andere keuzes dan vorige generaties. Zo kan een naam die ooit ‘chic’ klonk, later ‘ouderwets’ of ‘gewoon’ klinken.</p>
+      <p><b>Ook familienamen.</b> De oorspronkelijke betekenis van een familienaam gaat vaak verloren. <i>Vandeneucker</i> verwees naar een <i>eucker</i>, een notenboom. Vandaag roept de naam een heel andere associatie op en leidt hij soms tot plagerijen.</p>
+      <p><b>Van stereotype naar discriminatie.</b> Een <b>stereotype</b> is een vereenvoudigd, veralgemenend beeld van een groep. Wie iemand daardoor anders behandelt, bijvoorbeeld bij een sollicitatie of huuraanvraag, <b>discrimineert</b>.</p>
+      <p><b>Hoe meet je dat? De praktijktest.</b> Je stuurt twee aanvragen met een <b>identiek profiel</b>. Alleen de naam verschilt. Dan vergelijk je hoe vaak elke aanvraag een positieve reactie krijgt.</p>
+      <p><b>Gevolgen en reacties.</b> Sinds 2014 kunnen Belgische ouders kiezen welke familienaam hun kind krijgt. Uit een rondvraag van <i>De Standaard</i> bleek dat koppels met een niet-Belgische partner vaker bewust de Belgische familienaam kiezen, om hun kind te beschermen tegen discriminatie. Organisaties als <b>Unia</b> (België) en het <b>College voor de Rechten van de Mens</b> (Nederland) komen op tegen discriminatie.</p>
+    </div>
+    <div class="dos-work">
+      <h3>Werkfiche · de oorzaak-gevolgketen</h3>
+      <p class="small">Zet de schakels in de juiste volgorde.</p>
+      <div class="ex" id="ex-keten"></div>
+      <h3 style="margin-top:20px">Extra opdracht 1 · ontwerp een praktijktest</h3>
+      <p class="small">Je wilt nagaan of een naam invloed heeft op de kans om een appartement te huren. Wat laat je verschillen, wat houd je gelijk, wat meet je?</p>
+      <div class="ex" id="ex-praktijk"></div>
+      <h3 style="margin-top:20px">Extra opdracht 2 · mini-experiment voor je les</h3>
+      <p class="small">Kies twee <b>fictieve</b> voornamen. Laat je leerlingen raden hoe oud de drager is en wat zijn ouders doen. Leg daarna uit dat zulke aannames vaak niet kloppen.</p>
+      <div class="grid2"><div><b>Naam 1</b><textarea data-save="e3-n1" style="min-height:50px"></textarea></div><div><b>Naam 2</b><textarea data-save="e3-n2" style="min-height:50px"></textarea></div></div>
+      <b>Hoe ga ik dit in mijn les gebruiken?</b><textarea data-save="e3-exp"></textarea>
+      <div class="box tip"><b class="lbl">Sneller klaar? Sprinteropdracht</b>Zoek op wat <b>Unia</b> (België) of het <b>College voor de Rechten van de Mens</b> (Nederland) doet tegen discriminatie. Geef je leerlingen één concreet voorbeeld van een actie of een praktijktest.<textarea data-save="e3-sprint" style="margin-top:8px"></textarea></div>
+    </div>
+  </div>
+
+  <!-- shared lesson planner -->
+  <div class="card" id="planner" hidden>
+    <h3>🧑‍🏫 Ontwerp je privéles (15 minuten)</h3>
+    <p class="small">Vertrek van de lesdoelen. Verdeel je les in 3 blokken van 5 minuten. Bouw minstens één moment in waarop je leerlingen <b>zelf iets doen</b>, en bedenk <b>per lesdoel een controlevraag</b>. Geef je les thuis één keer hardop, met een timer.</p>
+    <div class="tabscroll"><table class="tab"><tr><th>Blok</th><th>Wat leg ik uit?</th><th>Wat doen mijn leerlingen?</th><th>Controlevraag</th></tr>
+      <tr><td><b>0–5′</b></td><td><textarea data-gsave="pl-1a"></textarea></td><td><textarea data-gsave="pl-1b"></textarea></td><td><textarea data-gsave="pl-1c"></textarea></td></tr>
+      <tr><td><b>5–10′</b></td><td><textarea data-gsave="pl-2a"></textarea></td><td><textarea data-gsave="pl-2b"></textarea></td><td><textarea data-gsave="pl-2c"></textarea></td></tr>
+      <tr><td><b>10–15′</b></td><td><textarea data-gsave="pl-3a"></textarea></td><td><textarea data-gsave="pl-3b"></textarea></td><td><textarea data-gsave="pl-3c"></textarea></td></tr></table></div>
+    <h4 style="margin-top:16px">Checklist voor je privéles</h4>
+    <div class="checklist" id="checklist"></div>
+    <div class="btnrow"><button class="btn gold" id="printPlan">🖨️ Druk mijn spiekbrief af</button></div>
+  </div>
+
+  <div class="card" id="others" hidden>
+    <h3>🔁 Na de privéles: herhaal de andere dossiers</h3>
+    <p class="small">Kreeg je les van de andere experts? Hier vind je hun kernuitleg terug om te herhalen.</p>
+    <div id="otherDossiers"></div>
+  </div>
+
+  <!-- stelling LPD7+ -->
+  <div class="card tape" style="margin-top:28px">
+    <span class="tag gold">Debat</span><h3 style="margin-top:8px">Stelling: “Je naam bepaalt mee wie je wordt.”</h3>
+    <p class="small">Neem een standpunt in en onderbouw het. Maak het verschil tussen <b>feiten</b> (wat onderzoek aantoont) en <b>meningen of aannames</b>.</p>
+    <div class="btnrow" id="standpunt">
+      <button class="btn ghost small" data-sp="eens">👍 Eens</button><button class="btn ghost small" data-sp="oneens">👎 Oneens</button><button class="btn ghost small" data-sp="genuanceerd">⚖️ Genuanceerd</button>
+    </div>
+    <details class="acc"><summary>Bouwstenen: argumenten uit de dossiers</summary><div class="in small grid2">
+      <div><b class="t-olive">Pro</b><ul style="padding-left:18px"><li>Het naamlettereffect is herhaaldelijk aangetoond.</li><li>Studies vonden verbanden tussen naam, beroep en werkgever.</li><li>Praktijktesten tonen dat mensen met bepaalde namen minder kansen krijgen. Zo beïnvloedt je naam je leven via anderen.</li></ul></div>
+      <div><b class="t-terra">Contra</b><ul style="padding-left:18px"><li>Verbanden kunnen andere oorzaken hebben: generatie, omgekeerd verband (familiebedrijf), sociale achtergrond.</li><li>De Belgische herhaling (2026) vond het naam-gezichteffect niet terug.</li><li>Opvallende aptoniemen zijn toeval (illusoire correlatie).</li><li>Een verband (correlatie) is nog geen oorzaak.</li></ul></div></div></details>
+    <p class="small"><b>Schrijfkader</b>: <i>Ik vind dat… · Een eerste argument is… · Bovendien… · Sommigen beweren dat…, maar… · Kortom…</i></p>
+    <div id="w-stelling"></div>
+  </div>
+  <div class="station-end" data-end="6"></div>
+</section>
+
+<!-- ========== 7 OEFENZONE ========== -->
+<section class="station" id="st7" data-title="Oefenzone">
+  <div class="st-head"><div class="st-num">7</div><div><div class="kicker">Station 7</div><h2>Oefenzone</h2><p class="lead">Train je kennis. Elke oefening levert punten op. Je kunt ze opnieuw maken; je beste score telt.</p></div></div>
+
+  <div class="card"><span class="tag terra">Oefening 1</span><h3 style="margin-top:8px">Sorteer de familienamen</h3><p class="small">Tik op een naam en daarna op de juiste groep, of sleep de naam erheen.</p><div class="ex" id="ex-sort"></div></div>
+  <div class="card"><span class="tag olive">Oefening 2</span><h3 style="margin-top:8px">Begrippen-match</h3><p class="small">Kies bij elke omschrijving het juiste begrip.</p><div class="ex" id="ex-match"></div></div>
+  <div class="card"><span class="tag blue">Oefening 3</span><h3 style="margin-top:8px">Vul aan: van naamkunde tot burgerlijke stand</h3><p class="small">Klik in een vakje en kies daarna een woord uit de woordbank, of typ het zelf. Er zitten twee woorden te veel in de bank.</p><div class="ex" id="ex-gap"></div></div>
+  <div class="card"><span class="tag gold">Oefening 4</span><h3 style="margin-top:8px">Tijdlijn: zet in de juiste volgorde</h3><div class="ex" id="ex-order"></div></div>
+  <div class="card"><span class="tag terra">Oefening 5</span><h3 style="margin-top:8px">Feit of fabel?</h3><p class="small">Klopt de uitspraak volgens het onderzoek?</p><div class="ex" id="ex-tf"></div></div>
+  <div class="card tape" style="border:2px solid var(--ink)"><span class="tag" style="background:var(--ink);color:var(--paper)">Bijlage 2</span><h3 style="margin-top:8px">🏆 De Ultieme Namentest</h3>
+    <p class="small">15 vragen · <b>zonder notities</b> · telkens één juist antwoord. Maak deze test <b>na de privélessen</b>. Je ziet je score per deel: A historisch, B emotioneel, C sociaal.</p>
+    <div class="ex" id="ex-namentest"></div></div>
+  <div class="station-end" data-end="7"></div>
+</section>
+
+<!-- ========== 8 ONDERZOEKSLAB ========== -->
+<section class="station" id="st8" data-title="Onderzoekslab">
+  <div class="st-head"><div class="st-num">8</div><div><div class="kicker">Station 8</div><h2>Onderzoekslab: jouw naam onder de loep</h2><p class="lead">Echte naamkundigen gebruiken databanken. Ontdek wat elke website biedt en onderzoek dan je eigen familienaam en voornaam.</p></div></div>
+  <div class="box let"><b class="lbl">Kritisch zoeken</b>Niet elke site is even betrouwbaar. Kijk wie de site maakt (een universiteit, een officiële instelling, een bedrijf?), op welke gegevens hij steunt en of je de uitleg in een tweede bron terugvindt.</div>
+  <div class="grid3" id="links" style="margin-top:16px"></div>
+
+  <div class="card" style="margin-top:22px">
+    <span class="tag terra">Schrijfopdracht A</span><h3 style="margin-top:8px">Mijn familienaam</h3>
+    <p>Achterhaal de <b>etymologische betekenis</b> van jouw achternaam en bespreek de <b>geografische spreiding</b>. Gebruik <a href="https://www.cbgfamilienamen.nl/nfb/index.php" target="_blank" rel="noopener">de Nederlandse Familienamenbank</a>, <a href="https://familienaam.info/" target="_blank" rel="noopener">familienaam.info</a> en <a href="https://familienaam.be/" target="_blank" rel="noopener">familienaam.be</a>. Schrijf <b>ongeveer 60 woorden</b>, in je eigen woorden.</p>
+    <p class="small muted">Wil je je eigen naam liever niet onderzoeken? Kies dan de naam van een bekende Vlaming of Nederlander.</p>
+    <div id="w-fam"></div>
+  </div>
+  <div class="card">
+    <span class="tag olive">Schrijfopdracht B</span><h3 style="margin-top:8px">Mijn voornaam</h3>
+    <p>Bespreek de <b>wereldwijde geografische spreiding</b> van jouw voornaam en achterhaal de <b>etymologie</b>. Gebruik <a href="https://nl.geneanet.org/voornaam/" target="_blank" rel="noopener">Geneanet</a> en <a href="https://nvb.meertens.knaw.nl/" target="_blank" rel="noopener">de Nederlandse Voornamenbank</a>. Schrijf <b>ongeveer 50 woorden</b>, in je eigen woorden.</p>
+    <div id="w-voor"></div>
+  </div>
+  <div class="card">
+    <h3>✅ Beoordeel jezelf</h3>
+    <p class="small">Je leraar gebruikt dezelfde rubric. Klik per criterium het niveau aan dat bij jouw teksten past.</p>
+    <div class="tabscroll"><table class="tab rub" id="rubric"></table></div>
+  </div>
+  <div class="station-end" data-end="8"></div>
+</section>
+
+<!-- ========== 9 EXIT ========== -->
+<section class="station" id="st9" data-title="Exit ticket">
+  <div class="st-head"><div class="st-num">9</div><div><div class="kicker">Station 9</div><h2>🎟️ Exit ticket</h2><p class="lead">Begrijp je de kern? Beantwoord de vragen, vul je 3-2-1 in en maak je ticket aan.</p></div></div>
+  <div class="card"><h3>Deel 1 · Kennischeck</h3><div class="ex" id="ex-exit"></div></div>
+  <div class="card"><h3>Deel 2 · 3-2-1</h3>
+    <div class="grid3">
+      <div><b>3 dingen die ik leerde</b><textarea data-save="x3"></textarea></div>
+      <div><b>2 begrippen die ik kan uitleggen</b><textarea data-save="x2"></textarea></div>
+      <div><b>1 vraag die ik nog heb</b><textarea data-save="x1"></textarea></div>
+    </div>
+    <h4 style="margin-top:14px">Hoe zeker voel je je over naamkunde?</h4>
+    <div class="btnrow" id="conf"></div>
+    <div class="btnrow"><button class="btn gold" id="makeTicket">🎟️ Maak mijn exit ticket</button></div>
+  </div>
+  <div id="ticket"></div>
+  <div class="station-end" data-end="9"></div>
+</section>
+
+</main>
+
+<footer><div class="wrap">
+  <p><b>Het Namenloket · Nomen est omen?</b> Interactieve lesmodule naamkunde voor Nederlands, 3de graad D/A-finaliteit (leerplan III-Ned-da).</p>
+  <p>Bronnen: Namenloket (begrippenlijst en opdrachtfiches ‘Nomen est omen?’), Ann Marynissen, <i>Familienamenatlas van het Nederlandse taalgebied</i> (AFNeT, Universität zu Köln), diareeks ‘Namen: Onomastiek. De taal van identiteit’, Les 13 Naamkunde, Verheyen, Van den Berckt &amp; Heyman (2026), <i>International Review of Social Psychology</i> 39(1). Je antwoorden worden alleen in deze browser bewaard.</p>
+  <div class="btnrow"><button class="btn ghost small" id="resetAll">↺ Alles wissen en opnieuw beginnen</button></div>
+</div></footer>
+
+<!-- glossary drawer -->
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="gloss" aria-label="Begrippenlijst">
+  <header><h3>📖 Begrippenlijst</h3><button class="x" id="closeGloss" aria-label="Sluiten">✕</button></header>
+  <input id="glossSearch" placeholder="Zoek een begrip…" aria-label="Zoek een begrip">
+  <div class="list" id="glossList"></div>
+</aside>
+
+<!-- teacher modal -->
+<div class="modal" id="teacher" role="dialog" aria-label="Leraarshoek">
+  <button class="x" id="closeTeacher" aria-label="Sluiten">✕</button>
+  <div class="kicker">Leraarshoek</div><h2>Didactische fiche &amp; leerplandoelen</h2>
+  <p class="muted">Leerplan <b>Nederlands III-Ned-da</b> (Katholiek Onderwijs Vlaanderen, D/2024/13.758/276, versie juni 2024).</p>
+  <h3>Voorgesteld lesverloop</h3>
+  <div class="tabscroll"><table class="tab"><tr><th>Les</th><th>Inhoud</th><th>Werkvorm</th></tr>
+    <tr><td><b>1</b></td><td>Stations 0–4: opwarmer, naamkunde, plaatsnamen, familienamen, voornamen</td><td>Individueel of in duo’s, klassikale nabespreking van het schema</td></tr>
+    <tr><td><b>2</b></td><td>Station 5 Leesatelier (oriënterend en intensief lezen, vragen, samenvatting) · start station 6: expertgroep kiezen</td><td>Individueel lezen, expertgroepen ±35′ (dossier, werkfiche, lesplan)</td></tr>
+    <tr><td><b>3</b></td><td>Privélessen 3 × 15′ · De Ultieme Namentest (bijlage 2) · debat over de stelling</td><td>Jigsaw in privélesgroepen; test zonder notities (eventueel op papier)</td></tr>
+    <tr><td><b>4</b></td><td>Station 7 Oefenzone · Station 8 Onderzoekslab (schrijfopdrachten + rubric) · Station 9 Exit ticket</td><td>Individueel; exit ticket afdrukken of doorsturen</td></tr></table></div>
+  <div class="box tip small"><b class="lbl">Klassement Namentest (bijlage 3)</b>Tel per privélesgroep de totalen op en deel door het aantal leden: de hoogste score wint. Ontbrak er een expert? Laat dat deel dan weg en vergelijk in percentages. De kleurscores (A/B/C) tonen welke privélessen het best overkwamen.</div>
+
+  <h3>Koppeling met de leerplandoelen</h3>
+  <div class="tabscroll"><table class="tab"><tr><th>LPD</th><th>Leerplandoel</th><th>Waar in de app · wat doet de leerling?</th></tr>
+    <tr><td><b>1</b></td><td>Onderwerp, hoofdgedachte en hoofdpunten bepalen bij lezen, luisteren en kijken</td><td>Leesatelier stap 1–2 (oriënterend lezen, vragen A), kernzinnen; tijdlijnen en schema’s in station 1–4; privéles volgen (luisteren/kijken)</td></tr>
+    <tr><td><b>2</b></td><td>Relevante informatie selecteren; kritisch omgaan met betrouwbaarheid, correctheid, bruikbaarheid</td><td>Werkfiches in de expertdossiers (informatie selecteren en structureren in tijdlijn, schema, keten); Onderzoekslab (bronnen vergelijken, kritisch zoeken); Feit of fabel</td></tr>
+    <tr><td><b>3</b></td><td>Een geschreven tekst schriftelijk samenvatten</td><td>Leesatelier stap 3–4: kernzinnen en een doorlopende samenvatting van 80–120 woorden met modeltekst</td></tr>
+    <tr><td><b>4</b></td><td>Doelgericht spreken en schrijven</td><td>Privéles van 15′ geven (presenteren); schrijfopdrachten A en B (60 en 50 woorden) met rubric; spiekbrief</td></tr>
+    <tr><td><b>5</b></td><td>Zich creatief uitdrukken met taal</td><td>Aptoniem bedenken (dossier 2), mini-experiment ontwerpen (dossier 3), naamkaartje</td></tr>
+    <tr><td><b>6</b></td><td>Doelgericht deelnemen aan interactie</td><td>Privéles met interactiemoment en controlevragen; debat. <i>Wordt pas echt gerealiseerd in de klas</i></td></tr>
+    <tr><td><b>7+</b></td><td>Mondeling en schriftelijk een eigen mening beargumenteren</td><td>Stelling “Je naam bepaalt mee wie je wordt”: standpunt, argument, tegenargument; feiten en meningen onderscheiden, stereotypen doorprikken</td></tr>
+    <tr><td><b>10</b></td><td>Effect van taaluitingen op identiteitsvorming en sociale omgang illustreren</td><td><b>Kern van de module</b>: dossiers 2 en 3 (sociale betekenis, stereotypering op basis van namen, discriminatie, naamkeuze), opwarmer over eigen naam, roep- en koosnamen</td></tr>
+    <tr><td><b>11</b></td><td>Inzicht in taalgebruik toepassen (vaste tekststructuren, tekstverbanden)</td><td>Chronologische structuur (tijdlijnen), oorzaak-gevolgstructuur (keten), onderzoeksstructuur (praktijktest, studieschema); signaalwoorden (leesatelier D)</td></tr>
+    <tr><td><b>12</b></td><td>Inzicht in het taalsysteem toepassen (klanken, woorden, betekenis, spelling)</td><td>Woordvorming in namen (-s, -sen, -zoon, Van de, Ver-); spelling-, klank-, vorm- en woordvariatie (AFNeT); Griekse woorddelen; soortnaam vs. eigennaam</td></tr>
+    <tr><td><b>13</b></td><td>Eerder en nieuw verworven woordenschat inzetten (vaktaal, laagfrequente woorden)</td><td>Begrippenlijst, begrippen-match, gap fill, woordenschat uit context (leesatelier C), vaktaal correct gebruiken in de privéles</td></tr>
+    <tr><td><b>14</b></td><td>Doelgericht strategieën inzetten</td><td>Oriënterend en intensief lezen, voorspellen, voorkennis activeren (opwarmer), betekenis via woorddelen en context, databanken als hulpmiddel, schrijfkaders en checklists, timer bij het oefenen van de les</td></tr></table></div>
+  <div class="box let small"><b class="lbl">Dekkingscheck</b><b>Niet gedekt:</b> LPD 8 en LPD 9 (literatuur). Wil je ze toch betrekken, gebruik dan een literair fragment met sprekende namen, bv. aptoniemen of namen met connotaties in een verhaal of strip. <b>Gedeeltelijk:</b> LPD 6 wordt alleen gerealiseerd als de privélessen en het debat echt in de klas plaatsvinden.</div>
+  <h3>Bronnen en evaluatie</h3>
+  <ul class="small"><li>Opdrachtfiches expertgroepen 1A–1C, De Ultieme Namentest en verbetersleutel (bijlagen 1–3, namenloket.be).</li><li>Begrippenlijst Namenloket · AFNeT en ‘Lexicale motiefgroepen en hun verspreiding’ (Ann Marynissen) · diareeks Onomastiek · Les 13 Naamkunde (rubric schrijfwerk).</li><li>Teksten, antwoorden en scores worden alleen lokaal in de browser bewaard. Laat leerlingen hun exit ticket afdrukken of de tekst kopiëren en indienen.</li></ul>
+</div>
+
+<div class="toast" id="toast"></div>
+<div id="printArea"></div>
+
+<script>
+/* ================= STATE ================= */
+const KEY="namenloket-v1";
+let S={scores:{},stamps:{},inputs:{},group:null,sp:null,conf:null,rubric:{}};
+try{const raw=localStorage.getItem(KEY);if(raw)S=Object.assign(S,JSON.parse(raw));}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+function el(tag,attrs={},html=""){const e=document.createElement(tag);for(const k in attrs){if(k==="class")e.className=attrs[k];else if(k.startsWith("on"))e[k]=attrs[k];else e.setAttribute(k,attrs[k]);}if(html)e.innerHTML=html;return e;}
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function norm(s){return (s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/\s+/g," ").trim();}
+function toast(t){const x=$("#toast");x.textContent=t;x.classList.add("on");clearTimeout(x._t);x._t=setTimeout(()=>x.classList.remove("on"),2200);}
+function confetti(){const c=["#b4532f","#5f7a2e","#2e5f8a","#d79b2b","#1f2f44"];for(let i=0;i<34;i++){const d=el("div",{class:"confetti"});d.style.left=Math.random()*100+"vw";d.style.background=c[i%5];d.style.animationDelay=Math.random()*.4+"s";d.style.borderRadius=Math.random()>.5?"50%":"2px";document.body.appendChild(d);setTimeout(()=>d.remove(),2200);}}
+function setScore(id,got,max){const prev=S.scores[id];if(!prev||got>prev.got)S.scores[id]={got,max};save();updateHeader();if(max&&got/max>=.8)confetti();}
+function updateHeader(){let t=0;for(const k in S.scores)t+=S.scores[k].got;$("#ptsTotal").textContent=t;$("#stampCount").textContent=Object.keys(S.stamps).length;renderNav();}
+
+/* ================= NAV ================= */
+const STATIONS=[["👋","Start"],["🔤","Naamkunde"],["🗺️","Plaatsnamen"],["🌳","Familienamen"],["✨","Voornamen"],["📖","Leesatelier"],["🎓","Expertgroep"],["🎯","Oefenzone"],["🔎","Onderzoekslab"],["🎟️","Exit ticket"]];
+let current=0;
+function renderNav(){const n=$("#stationNav");n.innerHTML="";STATIONS.forEach(([ic,t],i)=>{const b=el("button",{class:(i===current?"active ":"")+(S.stamps[i]?"done":""),"data-go":i},`<span class="num">${i}</span> ${ic} <span>${t}</span>`);n.appendChild(b);});}
+function go(i){i=+i;current=i;$$(".station").forEach(s=>s.classList.remove("active"));$("#st"+i).classList.add("active");renderNav();window.scrollTo({top:0,behavior:"smooth"});try{history.replaceState(null,"","#s"+i);}catch(e){}
+  const a=$("#stationNav .active");if(a)a.scrollIntoView({inline:"center",block:"nearest",behavior:"smooth"});}
+document.addEventListener("click",e=>{const g=e.target.closest("[data-go]");if(g){e.preventDefault();go(g.dataset.go);}});
+// route
+(function(){const r=$("#routeMap");STATIONS.slice(1).forEach(([ic,t],i)=>{r.appendChild(el("button",{"data-go":i+1},`<span class="ic">${ic}</span><b>${i+1}. ${t}</b>`));});})();
+// station ends
+$$(".station-end").forEach(box=>{const i=+box.dataset.end;const st=el("div",{class:"stamp"+(S.stamps[i]?" on":"")},`<div><big>${i}</big>afgerond</div>`);
+  const right=el("div",{class:"btnrow"});const done=el("button",{class:"btn gold"},S.stamps[i]?"✔ Station afgerond":"Station afronden ✔");
+  done.onclick=()=>{S.stamps[i]=1;save();st.classList.add("on");done.textContent="✔ Station afgerond";updateHeader();toast("Stempel verdiend! 🏷️");};
+  right.appendChild(done);if(i<9)right.appendChild(el("button",{class:"btn ghost","data-go":i+1},"Volgende station →"));
+  box.appendChild(st);box.appendChild(right);});
+
+/* ================= INPUT PERSISTENCE ================= */
+function bindSaves(root=document){root.querySelectorAll("[data-save]").forEach(f=>{const k=f.dataset.save;if(S.inputs[k]!=null){if(f.type==="checkbox")f.checked=!!S.inputs[k];else f.value=S.inputs[k];}
+  f.addEventListener(f.type==="checkbox"?"change":"input",()=>{S.inputs[k]=f.type==="checkbox"?f.checked:f.value;save();});});}
+function bindGroupSaves(){$$("[data-gsave]").forEach(f=>{const k="g"+S.group+"-"+f.dataset.gsave;f.value=S.inputs[k]||"";f.oninput=()=>{S.inputs["g"+S.group+"-"+f.dataset.gsave]=f.value;save();};});}
+
+/* ================= COMPONENTS ================= */
+function mcQuiz(root,id,qs,opt={}){root.innerHTML="";let answered=0,correct=0;const parts={};
+  qs.forEach((q,i)=>{const card=el("div",{class:"q"});card.innerHTML=`<div class="q-head">${q.part?`<span class="tag ${opt.partColor?opt.partColor[q.part]:""}">${q.part}</span>`:""}<b>${i+1}.</b> ${q.q}</div>`;
+    const os=el("div",{class:"opts"});const fb=el("div",{class:"fb"});fb.hidden=true;
+    q.o.forEach((o,j)=>{const b=el("button",{class:"opt"},`<span class="letter">${"abcdef"[j]}</span><span>${o}</span>`);
+      b.onclick=()=>{if(card.dataset.done)return;card.dataset.done=1;answered++;const ok=j===q.a;if(ok)correct++;if(q.part){parts[q.part]=parts[q.part]||[0,0];parts[q.part][1]++;if(ok)parts[q.part][0]++;}
+        [...os.children].forEach(x=>x.disabled=true);b.classList.add(ok?"correct":"wrong");os.children[q.a].classList.add("correct");
+        fb.hidden=false;fb.innerHTML=(ok?"✅ <b>Juist!</b> ":"❌ <b>Niet helemaal.</b> ")+(q.f||"");if(answered===qs.length)finish();};os.appendChild(b);});
+    card.appendChild(os);card.appendChild(fb);root.appendChild(card);});
+  const res=el("div",{class:"result"});root.appendChild(res);
+  function finish(){setScore(id,correct,qs.length);let ph="";for(const p in parts)ph+=`<span class="pill" style="color:var(--ink)">Deel ${p}: ${parts[p][0]}/${parts[p][1]}</span>`;
+    res.innerHTML=`<div class="scorecard"><span class="sc">${correct}/${qs.length}</span><span>${correct===qs.length?"Perfect! Echte naamdetective.":correct/qs.length>=.6?"Goed bezig!":"Herlees de uitleg en probeer opnieuw."}</span>${ph}</div>`;
+    const again=el("button",{class:"btn ghost small",style:"margin-top:10px"},"↺ Opnieuw");again.onclick=()=>mcQuiz(root,id,qs,opt);res.appendChild(again);if(opt.onDone)opt.onDone(correct,qs.length);}
+}
+function binary(root,id,items,labels=["Klopt","Klopt niet"]){root.innerHTML="";let done=0,ok=0;
+  items.forEach((it,i)=>{const card=el("div",{class:"q"});const row=el("div",{class:"binrow"});row.appendChild(el("div",{},`<b>${i+1}.</b> ${it.t}`));
+    const bs=el("div",{class:"bin"});const fb=el("div",{class:"fb"});fb.hidden=true;
+    labels.forEach((l,j)=>{const b=el("button",{class:"opt"},`<span class="letter">${j?"✗":"✓"}</span>${l}`);b.onclick=()=>{if(card.dataset.d)return;card.dataset.d=1;done++;const ans=j===0;const good=ans===it.a;if(good)ok++;
+      b.classList.add(good?"correct":"wrong");[...bs.children].forEach(x=>x.disabled=true);fb.hidden=false;fb.innerHTML=(good?"✅ ":"❌ ")+(it.f||"");if(done===items.length)fin();};bs.appendChild(b);});
+    row.appendChild(bs);card.appendChild(row);card.appendChild(fb);root.appendChild(card);});
+  const res=el("div",{class:"result"});root.appendChild(res);
+  function fin(){setScore(id,ok,items.length);res.innerHTML=`<div class="scorecard"><span class="sc">${ok}/${items.length}</span><span>${ok===items.length?"Foutloos!":"Lees de feedback bij je fouten."}</span></div>`;const a=el("button",{class:"btn ghost small",style:"margin-top:10px"},"↺ Opnieuw");a.onclick=()=>binary(root,id,items,labels);res.appendChild(a);}
+}
+function sorter(root,id,items,buckets){root.innerHTML="";let sel=null;const place={};items.forEach(it=>place[it.t]=null);
+  const pool=el("div",{class:"pool"});const bwrap=el("div",{class:"buckets"});root.appendChild(pool);root.appendChild(el("p",{class:"hintline"},"👆 Tik op een naam, dan op een groep. Fout geplaatst? Tik op de naam en dan op de grijze zone om hem terug te zetten."));root.appendChild(bwrap);
+  const zones={};
+  function mkChip(it){const c=el("button",{class:"chip",draggable:"true"},it.t);c.onclick=e=>{e.stopPropagation();sel=sel===it.t?null:it.t;render();};c.ondragstart=e=>{e.dataTransfer.setData("text/plain",it.t);};return c;}
+  function drop(target,name){place[name]=target;sel=null;render();}
+  pool.onclick=()=>{if(sel)drop(null,sel);};pool.ondragover=e=>e.preventDefault();pool.ondrop=e=>{e.preventDefault();drop(null,e.dataTransfer.getData("text/plain"));};
+  buckets.forEach(b=>{const bk=el("div",{class:"bucket"});const h=el("button",{class:"bh",style:`background:${b.c}`},`${b.l}${b.h?`<small>${b.h}</small>`:""}`);const z=el("div",{class:"bz"});
+    const act=()=>{if(sel)drop(b.k,sel);};h.onclick=act;bk.onclick=act;bk.ondragover=e=>{e.preventDefault();bk.classList.add("over");};bk.ondragleave=()=>bk.classList.remove("over");bk.ondrop=e=>{e.preventDefault();bk.classList.remove("over");drop(b.k,e.dataTransfer.getData("text/plain"));};
+    bk.appendChild(h);bk.appendChild(z);bwrap.appendChild(bk);zones[b.k]=z;});
+  const chips={};items.forEach(it=>chips[it.t]=mkChip(it));
+  function render(){pool.innerHTML="";Object.values(zones).forEach(z=>z.innerHTML="");shuffledOrder.forEach(it=>{const c=chips[it.t];c.classList.toggle("sel",sel===it.t);c.classList.remove("ok","no");(place[it.t]?zones[place[it.t]]:pool).appendChild(c);});}
+  const shuffledOrder=shuffle(items);render();
+  const br=el("div",{class:"btnrow"});const chk=el("button",{class:"btn"},"Controleer");const rs=el("button",{class:"btn ghost"},"↺ Opnieuw");br.appendChild(chk);br.appendChild(rs);root.appendChild(br);const res=el("div",{class:"result"});root.appendChild(res);
+  chk.onclick=()=>{let ok=0;items.forEach(it=>{const c=chips[it.t];if(place[it.t]===it.b){ok++;c.classList.add("ok");}else if(place[it.t]){c.classList.add("no");}});setScore(id,ok,items.length);
+    const left=items.filter(it=>!place[it.t]).length;res.innerHTML=`<div class="scorecard"><span class="sc">${ok}/${items.length}</span><span>${left?left+" naam/namen nog niet geplaatst. ":""}${ok===items.length?"Alles juist!":"Rood doorstreept = verkeerde groep. Verplaats en controleer opnieuw."}</span></div>`;};
+  rs.onclick=()=>sorter(root,id,items,buckets);
+}
+function matcher(root,id,pairs,extra=[]){root.innerHTML="";const answers=shuffle([...new Set(pairs.map(p=>p.r).concat(extra))]);const sels=[];
+  pairs.forEach(p=>{const row=el("div",{class:"mrow"});row.appendChild(el("div",{},p.l));const s=el("select",{"aria-label":"Kies"});s.appendChild(el("option",{value:""},"— kies —"));answers.forEach(a=>s.appendChild(el("option",{value:a},a)));row.appendChild(s);sels.push([s,p.r]);root.appendChild(row);});
+  const br=el("div",{class:"btnrow"});const chk=el("button",{class:"btn"},"Controleer");br.appendChild(chk);root.appendChild(br);const res=el("div",{class:"result"});root.appendChild(res);
+  chk.onclick=()=>{let ok=0;sels.forEach(([s,r])=>{s.classList.remove("ok","no");if(s.value===r){ok++;s.classList.add("ok");}else s.classList.add("no");});setScore(id,ok,pairs.length);res.innerHTML=`<div class="scorecard"><span class="sc">${ok}/${pairs.length}</span><span>${ok===pairs.length?"Alles juist!":"Pas de rode keuzes aan en controleer opnieuw."}</span></div>`;};
+}
+function gridMatch(root,id,rows,cols){root.innerHTML="";const wrap=el("div",{class:"tabscroll"});const t=el("table",{class:"tab"});let h="<tr><th>Studie</th>"+cols.map(c=>`<th>${c.t}</th>`).join("")+"</tr>";t.innerHTML=h;const sels=[];
+  rows.forEach((r,ri)=>{const tr=el("tr");tr.appendChild(el("td",{},`<b>${r}</b>`));cols.forEach(c=>{const td=el("td");const s=el("select");s.appendChild(el("option",{value:""},"— kies —"));shuffle(c.o.map((o,i)=>[o,i])).forEach(([o,i])=>s.appendChild(el("option",{value:i},o)));td.appendChild(s);tr.appendChild(td);sels.push([s,ri]);});t.appendChild(tr);});
+  wrap.appendChild(t);root.appendChild(wrap);const br=el("div",{class:"btnrow"});const chk=el("button",{class:"btn"},"Controleer");br.appendChild(chk);root.appendChild(br);const res=el("div",{class:"result"});root.appendChild(res);
+  chk.onclick=()=>{let ok=0;sels.forEach(([s,ri])=>{s.classList.remove("ok","no");if(s.value!==""&&+s.value===ri){ok++;s.classList.add("ok");}else s.classList.add("no");});setScore(id,ok,sels.length);res.innerHTML=`<div class="scorecard"><span class="sc">${ok}/${sels.length}</span><span>${ok===sels.length?"Je schema klopt. Klaar om les te geven!":"Pas de rode vakjes aan."}</span></div>`;};
+}
+function gapfill(root,id,text,extra){root.innerHTML="";const answers=[];let html=text.replace(/\{([^}]+)\}/g,(m,a)=>{const alts=a.split("|");answers.push(alts);return `<input data-i="${answers.length-1}" aria-label="invulvak ${answers.length}" autocomplete="off">`;});
+  const bankWords=shuffle(answers.map(a=>a[0]).concat(extra));const bank=el("div",{class:"bank"});let last=null;
+  bankWords.forEach(w=>{const c=el("button",{class:"chip"},w);c.onclick=()=>{const target=last||[...p.querySelectorAll("input")].find(i=>!i.value);if(target){target.value=w;target.classList.remove("ok","no");const nxt=[...p.querySelectorAll("input")].find(i=>!i.value);last=nxt||null;if(nxt)nxt.focus();markUsed();}};bank.appendChild(c);});
+  root.appendChild(el("div",{class:"small muted"},"Woordbank:"));root.appendChild(bank);const p=el("p",{class:"gap"},html);root.appendChild(p);
+  p.querySelectorAll("input").forEach(i=>{i.onfocus=()=>last=i;i.oninput=markUsed;});
+  function markUsed(){const vals=[...p.querySelectorAll("input")].map(i=>norm(i.value));[...bank.children].forEach(c=>c.classList.toggle("used",vals.includes(norm(c.textContent))));}
+  const br=el("div",{class:"btnrow"});const chk=el("button",{class:"btn"},"Controleer");const rs=el("button",{class:"btn ghost"},"↺ Leegmaken");br.appendChild(chk);br.appendChild(rs);root.appendChild(br);const res=el("div",{class:"result"});root.appendChild(res);
+  chk.onclick=()=>{let ok=0;p.querySelectorAll("input").forEach(i=>{const good=answers[+i.dataset.i].some(a=>norm(a)===norm(i.value));i.classList.remove("ok","no");i.classList.add(good?"ok":"no");if(good)ok++;});setScore(id,ok,answers.length);res.innerHTML=`<div class="scorecard"><span class="sc">${ok}/${answers.length}</span><span>${ok===answers.length?"Helemaal juist!":"Verbeter de rode vakjes."}</span></div>`;};
+  rs.onclick=()=>gapfill(root,id,text,extra);
+}
+function orderer(root,id,items,fbText){root.innerHTML="";let order=shuffle(items.map((t,i)=>i));if(order.every((v,i)=>v===i))order.reverse();const ol=el("ol",{class:"order"});root.appendChild(ol);
+  function render(){ol.innerHTML="";order.forEach((idx,pos)=>{const li=el("li");li.appendChild(el("span",{class:"tx"},items[idx]));const up=el("button",{"aria-label":"omhoog"},"↑");const dn=el("button",{"aria-label":"omlaag"},"↓");
+    up.onclick=()=>{if(pos>0){[order[pos-1],order[pos]]=[order[pos],order[pos-1]];render();}};dn.onclick=()=>{if(pos<order.length-1){[order[pos+1],order[pos]]=[order[pos],order[pos+1]];render();}};li.appendChild(up);li.appendChild(dn);ol.appendChild(li);});}
+  render();const br=el("div",{class:"btnrow"});const chk=el("button",{class:"btn"},"Controleer");br.appendChild(chk);root.appendChild(br);const res=el("div",{class:"result"});root.appendChild(res);
+  chk.onclick=()=>{let ok=0;[...ol.children].forEach((li,pos)=>{li.classList.remove("ok","no");if(order[pos]===pos){ok++;li.classList.add("ok");}else li.classList.add("no");});setScore(id,ok,items.length);res.innerHTML=`<div class="scorecard"><span class="sc">${ok}/${items.length}</span><span>${ok===items.length?(fbText||"Juiste volgorde!"):"Groen staat goed, rood nog niet. Schuif verder."}</span></div>`;};
+}
+function writer(root,key,min,max,ph){root.innerHTML="";const ta=el("textarea",{"data-save":key,placeholder:ph||"Schrijf hier…",style:"min-height:150px"});const cnt=el("div",{class:"counter"});
+  const br=el("div",{class:"btnrow"});const cp=el("button",{class:"btn ghost small"},"📋 Kopieer tekst");br.appendChild(cp);root.appendChild(ta);root.appendChild(cnt);root.appendChild(br);
+  function upd(){const n=ta.value.trim()?ta.value.trim().split(/\s+/).length:0;cnt.textContent=`${n} woorden (doel: ${min}–${max})`;cnt.className="counter "+(n>=min&&n<=max?"in":"out");}
+  ta.addEventListener("input",upd);bindSaves(root);upd();
+  cp.onclick=()=>{const t=ta.value;if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>toast("Gekopieerd!"),()=>{ta.select();document.execCommand("copy");toast("Gekopieerd!");});else{ta.select();document.execCommand("copy");toast("Gekopieerd!");}};
+}
+
+/* ================= STATION 1: stems ================= */
+const STEMS=[["ónoma","naam (Gr.)","onomastiek","de studie van namen"],["tópos","plaats (Gr.)","toponiem","een plaatsnaam"],["ánthropos","mens (Gr.)","antroponiem","een persoonsnaam"],["hýdor","water (Gr.)","hydroniem","een waternaam: Schelde, Dijle, Donkmeer"],["hodós","weg (Gr.)","hodoniem","een straat- of wegnaam"],["óros","berg (Gr.)","oroniem","een berg- of heuvelnaam: Kemmelberg"],["aptus","passend (Lat.)","aptoniem","een naam die opvallend goed past bij de drager: bakker De Bakker"],["epi","naar, op (Gr.)","eponiem","een woord dat teruggaat op een persoonsnaam: zeppelin"]];
+(function(){const w=$("#stems");STEMS.forEach(s=>{const b=el("button",{class:"stem"},`${s[0]}<small>${s[1]}</small>`);b.onclick=()=>{$$(".stem").forEach(x=>x.classList.remove("on"));b.classList.add("on");$("#stemWord").textContent=s[2];$("#stemExpl").innerHTML=`<b>${s[2]}</b> = ${s[3]}`;};w.appendChild(b);});})();
+
+/* ================= STATION 2 ================= */
+const HOTS=[
+ {x:250,y:84,t:"Oroniem",s:"berg- en heuvelnamen",d:"Namen van verheffingen in het landschap. In Vlaanderen spreken we ook van <b>reliëfnamen</b> of <b>hoogtenamen</b> (heuvel, donk, duin). Tegenover hoogtenamen staan <b>laagtenamen</b> (een dal, een duinpan).",v:"Kemmelberg"},
+ {x:440,y:300,t:"Hydroniem",s:"waternamen",d:"Namen van natuurlijke of gegraven waterlopen en van stilstaand water. Een <b>riviernaam</b> verwijst naar een grote natuurlijke waterloop. De oudste waternamen zijn vaak <b>Keltisch</b> of zelfs <b>Voorgermaans</b>.",v:"Schelde, Maas, Dijle, Leuvense Vaart, Donkmeer"},
+ {x:700,y:332,t:"Hodoniem",s:"straat- en wegnamen",d:"Namen van verharde of onverharde wegen, maar ook van een plein of marktplaats. Een <b>vernoemingsstraatnaam</b> eert een verdienstelijke persoon.",v:"Lily Boeykensstraat, Frère Orbanlaan, Dikkelelindestraat"},
+ {x:330,y:255,t:"Nederzettingsnaam",s:"namen van dorpen en steden",d:"Een naam voor een bewoonde plaats die uit een historische nederzetting ontstond. Vaak zitten er <b>bouwstenen</b> in zoals <i>heem</i> (woonplaats).",v:"Houtem (hout + heem), Zedelgem (‘woonplaats van de lieden van Sidulo’)"},
+ {x:120,y:365,t:"Veldnaam (terreinnaam)",s:"namen van stukken grond",d:"Namen voor ontgonnen grond (cultuurland: akker, dries, weide) en niet-ontgonnen grond (natuurland: heide, moeras). Veldnamen zijn vaak <b>microtoponiemen</b>: alleen lokaal bekend.",v:"de Hoge Akker, de Dries, de Heide"},
+ {x:505,y:225,t:"Natuurlijke naamgeving",s:"een naam die iets concreets beschrijft",d:"De meeste oude plaatsnamen ontstonden spontaan en verwijzen naar iets wat er echt was. <b>Molenbeek</b> is genoemd naar de molen die door de beek werd aangedreven.",v:"Molenbeek, Dikkelelindestraat"}];
+(function(){const g=$("#hots");const ns="http://www.w3.org/2000/svg";HOTS.forEach((h,i)=>{const gg=document.createElementNS(ns,"g");gg.setAttribute("class","hot");gg.setAttribute("tabindex","0");gg.setAttribute("role","button");gg.setAttribute("aria-label",h.t);
+  gg.innerHTML=`<circle class="pulse" cx="${h.x}" cy="${h.y}" r="12" fill="#d79b2b" opacity=".6"/><circle class="dot" cx="${h.x}" cy="${h.y}" r="12" fill="#1f2f44" stroke="#fff" stroke-width="3"/><text x="${h.x}" y="${h.y+5}" text-anchor="middle" font-size="14" font-weight="700" fill="#fff" style="pointer-events:none">${i+1}</text>`;
+  const show=()=>{$("#hotInfo").innerHTML=`<span class="tag terra">${i+1}</span><h3 style="margin:6px 0 2px">${h.t}</h3><p class="small muted" style="margin-top:0">${h.s}</p><p>${h.d}</p><p class="small"><b>Voorbeelden:</b> <i>${h.v}</i></p>`;};
+  gg.addEventListener("click",show);gg.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();show();}});g.appendChild(gg);});})();
+binary($("#ex-plaats"),"plaats",[
+ {t:"<i>Molenbeek</i>: genoemd naar de molen die door de beek werd aangedreven",a:true,f:"Natuurlijk: de naam beschrijft iets wat er echt was."},
+ {t:"<i>Koningin Astridlaan</i>",a:false,f:"Kunstmatig: een vernoeming naar een persoon, zonder band met de plek."},
+ {t:"<i>Dikkelelindestraat</i>: naar één opvallende dikke linde",a:true,f:"Natuurlijk: de linde stond er echt."},
+ {t:"<i>Beukenlaan</i> in een nieuwe wijk waar nooit beuken stonden",a:false,f:"Kunstmatig: een fantasienaam."},
+ {t:"<i>Groot-Brittanniëlaan</i>",a:false,f:"Kunstmatig: vernoemd naar een land."},
+ {t:"<i>Kemmelberg</i>",a:true,f:"Natuurlijk: de naam verwijst naar de heuvel zelf."}],["Natuurlijk","Kunstmatig"]);
+
+/* ================= STATION 3 ================= */
+const TL=[
+ {i:"👤",t:"Eennamigheid",s:"oorsprong",d:"<b>Eén naam per persoon.</b> Germaanse namen hadden een betekenis: <i>Baldwin</i> = ‘moedige vriend’. In kleine gemeenschappen volstond één naam."},
+ {i:"🏘️",t:"Toenamen",s:"vanaf de 12de eeuw",d:"<b>Bevolkingsgroei en steden</b> zorgen voor te veel mensen met dezelfde voornaam. Men voegt spontaan een <b>toenaam</b> toe: <i>Jan Pietersen</i>, <i>Jan de Smid</i>. Dat gebeurt het vroegst in het <b>graafschap Vlaanderen</b>, vooral in de steden."},
+ {i:"🧬",t:"Erfelijk",s:"late middeleeuwen",d:"De toenaam wordt <b>overerfbaar</b>: kinderen krijgen dezelfde naam als hun vader, en zo ontstaat de familienaam. Dat verspreidt zich van <b>zuid naar noord</b>, van <b>stad naar platteland</b> en van <b>elite naar lagere standen</b>."},
+ {i:"📜",t:"Burgerlijke stand",s:"1795 / 1811",d:"Onder Frans bewind (bij ons rond 1795, in Nederland in <b>1811</b> onder Napoleon) wordt de familienaam <b>officieel vastgelegd</b>. Wie geen naam had, moest er een aannemen. Daarna kon de naam alleen nog via een Koninklijk Besluit veranderen. In de noordelijke provincies bleven vadersnamen nog lang in gebruik."},
+ {i:"👪",t:"Vrije keuze",s:"België, sinds 2014",d:"Sinds 2014 kunnen Belgische ouders <b>kiezen</b> welke familienaam hun kind krijgt. Die keuze kan ook een sociale betekenis hebben (zie expertgroep 3)."}];
+(function(){const w=$("#tl");TL.forEach((s,i)=>{const b=el("button",{},`<span class="dot">${s.i}</span><b>${s.t}</b><small>${s.s}</small>`);b.onclick=()=>{$$("#tl button").forEach(x=>x.classList.remove("on"));b.classList.add("on");$("#tlDetail").innerHTML=`<h4>${s.t} <span class="muted small">· ${s.s}</span></h4><p style="margin:0">${s.d}</p>`;};w.appendChild(b);});w.children[0].click();})();
+const MOTIEF=[
+ {ic:"🌳",t:"Afstammings- of verwantschapsnamen",q:"Wiens kind was hij?",c:"var(--terra)",b:"<b>Patroniem</b> (vadersnaam): Janssens, Gerritsen, Michiels, Lambrecht, Florizoone, Jansseune (‘zoon van Jan’).<br><b>Metroniem</b> (moedersnaam): Mariën (‘van Marie’), Roose, Cleeren.<br><b>Verwantschapsnaam</b>: Ooms (oom), De Neve (neef), Cosyns, Dirkzwager (zwager van Dirk)."},
+ {ic:"⚒️",t:"Beroepsnamen",q:"Wat deed hij?",c:"var(--gold)",b:"Beroep of ambt van de eerste drager: De Clerck, Smit, Beckers, Rademakers, Mulder; ambten: Meijer, De Ridder, Schepens. Stedelijke ambachten: De Wever, Ketelslegers. Platteland: De Boer.<br><b>Indirecte beroepsnamen</b> noemen een product: Hamer, Bijl, Mostert, Wittebrood, Zoetemelk."},
+ {ic:"🪞",t:"Eigenschaps- en diernamen",q:"Hoe was hij?",c:"#8a6b4a",b:"Een opvallend kenmerk: fysiek (De Groote, De Bruyne, Crompvoets), karakter (De Wilde, Goedegebuure), leeftijd (De Jong, Den Ouden), bezit (Hoet, Zondergeld), gedrag (Vroegop), jaargetijde (De Winter, Somers).<br><b>Diernamen</b>: De Leeuw, Vos, De Pauw (meerduidig!)."},
+ {ic:"🏡",t:"Woonplaatsnamen (adresnamen)",q:"Waar woonde hij?",c:"var(--blue)",b:"Bij een klein plaatselijk element: Van de Velde, Bosmans, Van der Poel, Vandebroek, Verbeek. Bij een gebouw: Vermeulen, Verhoeven, Van de Casteele. Bij een landschapselement: Van den Berg, Van Daele.<br>Vaak met <b>Van de(n/r)-</b> of <b>Ver-</b>."},
+ {ic:"🧭",t:"Herkomstnamen",q:"Waar kwam hij vandaan?",c:"var(--olive)",b:"Wijzen op migratie: dorp of stad (Van Dessel, Van Keulen, Van Parijs, Brusselmans), inwonersnaam (De Vlaeminck, Debrabandere, Den Hollander) of streek of land (Van Holland, Van Zweden)."}];
+(function(){const w=$("#motiefCards");MOTIEF.forEach(m=>{const f=el("button",{class:"flip","aria-label":m.t});f.innerHTML=`<div class="flip-in"><div class="face front" style="border-color:${m.c}"><div class="big">${m.ic}</div><h4>${m.t}</h4><q>${m.q}</q><span class="hint">klik ↻</span></div><div class="face back" style="border-color:${m.c}"><h4 style="color:${m.c}">${m.t}</h4><div>${m.b}</div></div></div>`;f.onclick=()=>f.classList.toggle("flipped");w.appendChild(f);});})();
+
+// analyser
+const AN={
+ verw:["ooms","oom","deneve","neve","neef","cosyns","cosijn","cosijns","dirkzwager","zwager","parrein","beaupere"],
+ indirect:["hamer","bijl","byl","mostert","mosterd","wittebrood","zoetemelk","brood","haring","devis","vis"],
+ places:["dessel","keulen","holland","parijs","brussel","gent","brugge","mechelen","damme","vlaanderen","vlaeminck","vlaminck","brabant","leuven","aalst","zweden","kortrijk","ieper","yper","lier","tienen","antwerpen","hasselt","diest","hollander","brabander","friese","vries","zeeuw","limburg","geldere","kempen","gelder"],
+ beroepContains:["smet","smit","smid","bakker","backer","becker","clerck","clercq","klerk","wever","mulder","molenaar","meulenaer","meyer","meijer","ridder","schepen","dekker","decker","visser","timmerman","kramer","kremer","cremer","maker","maeker","slegers","slagers","barbier","koster","kuyper","cuyper","kuiper","brouwer","snijder","snyder","kastelein","kesteleyn","scheper","schipper","verwer","smeets","bouwens","olieslaeg","tavernier","coster","custers"],
+ beroepDe:["boer","winne","kok","cock","cocq","bie","boeck","backer","wolf"],
+ eig:["groot","groote","grote","klein","kleine","lange","lang","wit","witte","witt","wilde","bruyn","bruyne","bruin","zwart","zwarte","swart","jong","jonge","jongh","oude","ouden","goede","rode","roo","rooy","kort","korte","crompvoets","vroegop","zondergeld","winter","somers","zomer","dapper","blonde","blond","rijcke","rycke","rijke","arm","arme","hoet","mettepenningen","drijkoningen","seldeslachts","goedegebuure","bastaert","koninck","coninck"],
+ dier:["vos","leeuw","pauw","haan","haen","valk","vink","vinck","kat","raaf","duif","beer","uil","os","hert","haas","mus","kraai","snoek"],
+ met:["mari","roos","rose","cleer","claer","tryn","lysen","lijsen","mettens","neel","beel","geertruy","katelijn","mayken"],
+ pat:["jan","peeter","pieter","peter","gerrit","michiel","willem","hendri","henri","lambrecht","lambert","claes","claas","klaas","david","joos","geert","gert","dirk","dierick","dierckx","aert","arnout","baert","gijs","ghys","maarten","marten","mertens","maes","thomas","wouter","wauter","govaert","goossen","lenaert","frans","franck","vranck","vranckx","huyb","jacob","adriaen","adriaan","simon","steven","philips","pauwel","floriz","floris","gielen","joris","jorissen","herman","everaert","evert","segers","seger","robbrecht","bernard","lauwer","leysen","coppens","ceulemans","wuyts","laurens","hubrecht","gysel","claessens","goris","nijs","hendrickx","martens","engelen","raes","raets","geerts","celis","cools","michielsen","stevens","lenaerts","aerts","bertels","verbiest"]};
+function ontleed(raw){const n=raw.trim();if(!n)return null;const s=norm(n).replace(/[^a-z' -]/g,"");const c=s.replace(/[ '-]/g,"");
+ const R=(m,col,u,z)=>({m,col,u,z});const has=(arr,str)=>arr.some(w=>str.includes(w));const starts=(arr,str)=>arr.some(w=>str.startsWith(w));
+ if(AN.verw.includes(c)||AN.verw.includes(c.replace(/^de/,""))) return R("Verwantschapsnaam","var(--terra)","De naam verwijst naar de plaats van de eerste drager in de ruimere familie (oom, neef, zwager…).","vrij zeker");
+ if(AN.indirect.some(w=>c===w||c===w+"s"||c==="de"+w)) return R("Indirecte beroepsnaam","var(--gold)","De naam noemt een werktuig of product dat bij een beroep hoorde. Een <i>Wittebrood</i> was waarschijnlijk bakker, een <i>Hamer</i> smid of timmerman. Opgelet: <i>Haring</i> en <i>De Vis</i> kunnen ook diernamen zijn.","waarschijnlijk");
+ const vanForm=/^(van ?de[nr]?|vande[nr]?|van|ver|ter|ten|uyt|uit|opde|op de)/.test(s.replace(/\s+/g," "));
+ if(vanForm){
+   if(has(AN.places,c)) return R("Herkomstnaam","var(--olive)","<b>Van + plaatsnaam</b>: de eerste drager kwam uit die plaats of streek. <i>Waar kwam hij vandaan?</i> Opgelet: soms kan het ook een woonplaatsnaam zijn (bv. <i>Van Damme</i>: de gemeente Damme of gewoon een dam?).","waarschijnlijk");
+   return R("Woonplaatsnaam (adresnaam)","var(--blue)","Vormen met <b>Van de(n/r)-</b> of <b>Ver-</b> (samengetrokken uit <i>van der</i>) wijzen meestal naar een plek bij de woning van de eerste drager: een beek, een bos, een molen, een linde, een hof… <i>Waar woonde hij?</i> Zoek op wat het tweede deel betekent.","waarschijnlijk");}
+ if(/^(de|den|der|d')/.test(s)&&s.length>3){const rest=c.replace(/^(den|der|de|d)/,"");
+   if(AN.beroepContains.some(w=>rest.includes(w))||AN.beroepDe.includes(rest)) return R("Beroepsnaam","var(--gold)","<b>De + beroep</b>: de eerste drager oefende dat beroep of ambt uit. <i>Wat deed hij?</i>","vrij zeker");
+   if(AN.dier.includes(rest)) return R("Diernaam (eigenschapsnaam)","#8a6b4a","De eerste drager werd met een dier vergeleken (sterk als een leeuw, sluw als een vos…). Opgelet: het kan ook om een <b>huisnaam</b> gaan, het uithangbord van een huis.","mogelijk");
+   if(AN.eig.includes(rest)) return R("Eigenschapsnaam","#8a6b4a","<b>De + kenmerk</b>: een opvallende eigenschap van de eerste drager (lengte, haarkleur, karakter, leeftijd…). <i>Hoe was hij?</i>","vrij zeker");
+   if(has(AN.places,rest)) return R("Herkomstnaam (inwonersnaam)","var(--olive)","Een inwonersnaam: <i>De Vlaeminck</i> = de Vlaming, <i>Debrabandere</i> = de Brabander.","vrij zeker");}
+ if(AN.beroepContains.some(w=>c.includes(w))) return R("Beroepsnaam","var(--gold)","In deze naam herken je een beroep of ambt. <i>Wat deed hij?</i> Varianten als <i>Smets</i> of <i>Beckers</i> betekenen vaak ‘(zoon) van de smid/bakker’.","waarschijnlijk");
+ if(AN.dier.includes(c)) return R("Diernaam (eigenschapsnaam)","#8a6b4a","Een vergelijking met een dier, of een huisnaam.","mogelijk");
+ if(AN.eig.includes(c)) return R("Eigenschapsnaam","#8a6b4a","Een opvallend kenmerk van de eerste drager.","waarschijnlijk");
+ if(/mans?$/.test(c)){ if(has(AN.places,c)) return R("Herkomstnaam","var(--olive)","<b>Plaatsnaam + -man(s)</b>: ‘de man uit…’. <i>Brusselmans</i> = iemand uit Brussel.","waarschijnlijk");
+   return R("Woonplaatsnaam","var(--blue)","<b>-man(s)</b> achter een plaatsaanduiding betekent ‘de man van/bij…’: <i>Bosmans</i> = de man die bij het bos woonde.","mogelijk");}
+ if(starts(AN.met,c)) return R("Metroniem (moedersnaam)","var(--terra)","De naam gaat terug op de voornaam van de <b>moeder</b>: <i>Mariën</i> = ‘(kind) van Marie’.","mogelijk");
+ if(starts(AN.pat,c)||AN.pat.includes(c)) return R("Patroniem (vadersnaam)","var(--terra)","In de naam zit de voornaam van de <b>vader</b>, vaak met <b>-s, -sen, -x</b> of <b>-zoon</b>: <i>Peeters</i> = de kinderen van een Peter.","waarschijnlijk");
+ if(/(zoon|zone|soone|szn|sen|ssens|seune)$/.test(c)) return R("Patroniem (vadersnaam)","var(--terra)","De uitgang <b>-zoon / -sen / -seune</b> betekent ‘zoon van’.","mogelijk");
+ return R("Geen duidelijk patroon","var(--ink)","De ontleder herkent geen typische vorm. Dat is normaal: veel namen zijn door klankverandering of spelling onherkenbaar geworden. Zoek de naam op in een databank!","onbekend");}
+function runAn(){const v=$("#anInput").value;const r=ontleed(v);const o=$("#anOut");if(!r){o.classList.remove("on");return;}
+ o.style.background=r.col;o.innerHTML=`<div class="small" style="opacity:.85;text-transform:uppercase;letter-spacing:.1em">${v.replace(/</g,"")} · zekerheid: ${r.z}</div><h4>${r.m}</h4><p style="margin:4px 0 10px">${r.u}</p><div class="small" style="background:rgba(255,255,255,.18);border-radius:10px;padding:8px 10px">🔎 <b>Check het echt:</b> <a style="color:#fff" href="https://familienaam.be/" target="_blank" rel="noopener">familienaam.be</a> · <a style="color:#fff" href="https://www.cbgfamilienamen.nl/nfb/index.php" target="_blank" rel="noopener">Nederlandse Familienamenbank</a> · <a style="color:#fff" href="https://familienaam.info/" target="_blank" rel="noopener">familienaam.info</a></div>`;o.classList.add("on");}
+$("#anBtn").onclick=runAn;$("#anInput").addEventListener("keydown",e=>{if(e.key==="Enter")runAn();});
+
+// tilemap
+const MC={A:["var(--terra)","afstammingsnamen"],W:["var(--blue)","woonplaatsnamen"],B:["var(--gold)","beroepsnamen"],H:["var(--olive)","herkomstnamen"]};
+const PROV=[{n:"Friesland",c:3,r:1,m:"W",p:39,l:"NL"},{n:"Groningen",c:4,r:1,m:"B",p:36,l:"NL"},{n:"Noord-Holland",c:2,r:2,m:"B",p:36,l:"NL"},{n:"Flevoland",c:3,r:2,m:"W",p:33,l:"NL"},{n:"Drenthe",c:4,r:2,m:"B",p:30,l:"NL"},{n:"Zuid-Holland",c:2,r:3,m:"W",p:33,l:"NL"},{n:"Utrecht",c:3,r:3,m:"W",p:34,l:"NL"},{n:"Overijssel",c:4,r:3,m:"W",p:34,l:"NL"},{n:"Zeeland",c:1,r:4,m:"B",p:30,l:"NL"},{n:"Noord-Brabant",c:2,r:4,s:2,m:"H",p:30,l:"NL",x:"De enige provincie waar herkomstnamen winnen. Naamkundig heeft Noord-Brabant een heel eigen karakter."},{n:"Gelderland",c:4,r:4,m:"A",p:35,l:"NL",x:"Sluit aan bij het oostelijke Vlaamse gebied met veel afstammingsnamen."},{n:"Limburg",c:5,r:4,m:"A",p:56,l:"NL",x:"Net als Belgisch-Limburg 56%: een teken van de historische eenheid van de regio."},{n:"West-Vlaanderen",c:1,r:5,m:"W",p:35,l:"BE",x:"Hier verliezen de afstammingsnamen het van de woonplaatsnamen."},{n:"Oost-Vlaanderen",c:2,r:5,m:"A",p:32,l:"BE",x:"Afstammingsnamen winnen, maar minder sterk dan in het oosten."},{n:"Antwerpen",c:3,r:5,m:"A",p:43,l:"BE"},{n:"Limburg",c:4,r:5,m:"A",p:56,l:"BE",x:"Absolute uitschieter: meer dan de helft van de 100 frequentste namen is een vaders- of moedersnaam."},{n:"Vlaams-Brabant",c:3,r:6,m:"A",p:50,l:"BE",x:"De helft van de frequentste namen is een afstammingsnaam."}];
+(function(){const w=$("#tilemap");PROV.forEach(p=>{const b=el("button",{class:"tile",style:`grid-column:${p.c}${p.s?" / span "+p.s:""};grid-row:${p.r};background:${MC[p.m][0]}`},`<span class="cty">${p.l}</span><span>${p.n}</span><b>${p.p}%</b>`);
+  b.onclick=()=>{$$(".tile").forEach(t=>t.classList.remove("sel"));b.classList.add("sel");$("#tileInfo").innerHTML=`<span class="tag" style="background:${MC[p.m][0]};color:#fff;border:0">${MC[p.m][1]}</span><h3 style="margin:8px 0 2px">${p.n} (${p.l})</h3><p style="margin:0">Grootste motiefgroep: <b>${MC[p.m][1]}</b>, met <b>${p.p}%</b> van de 100 frequentste namen.</p>${p.x?`<p class="small" style="margin-top:8px">${p.x}</p>`:""}`;};w.appendChild(b);});})();
+mcQuiz($("#ex-geo"),"geo",[
+ {q:"In welke provincie vormen <b>herkomstnamen</b> de grootste groep?",o:["West-Vlaanderen","Noord-Brabant","Friesland","Antwerpen"],a:1,f:"Noord-Brabant is de enige provincie waar herkomstnamen winnen (30%)."},
+ {q:"Belgisch en Nederlands Limburg hebben allebei 56% afstammingsnamen. Wat toont dat aan?",o:["Dat Limburgers vaker van naam veranderen","De historische eenheid van die regio binnen de Lage Landen","Dat de gegevens uit hetzelfde jaar komen","Dat er in Limburg weinig steden zijn"],a:1,f:"Over de landsgrens heen blijkt dezelfde naamtraditie: een historische eenheid."},
+ {q:"Welke motiefgroep is in <b>geen enkele</b> provincie de grootste?",o:["Beroepsnamen","Woonplaatsnamen","Eigenschapsnamen","Afstammingsnamen"],a:2,f:"Eigenschapsnamen bestaan overal, maar winnen nergens."}]);
+
+/* ================= STATION 4 ================= */
+const PER=[
+ {t:"I. Germaanse namen",c:"var(--olive)",d:"De <b>oudste laag</b>. Een naam bestaat uit <b>twee naamstammen</b>; de tweede stam bepaalt het geslacht. Ouders combineerden stammen van familieleden, dus er was veel variatie.",v:"Adelbert (adel + bert), Gertrud (ger + trud), Baldwin (bald ‘moedig’ + win ‘vriend’)"},
+ {t:"II. Middeleeuwse naamgeving",c:"var(--blue)",d:"Vanaf de <b>12de/13de eeuw</b> verdringen uitheemse <b>heiligennamen</b> de Germaanse namen. Oorzaken: kruistochten, de kerk, bedelmonniken en vooral de <b>heiligenverering</b>. Het was ook <b>mode</b>: via steden en elite, uit statusoverwegingen. Zelfs protestanten bleven ze geven, omdat ze ingeburgerd waren.",v:"Jan, Pieter, Klaasje"},
+ {t:"III. Stabiliteit door vernoeming",c:"#8a6b4a",d:"Tot de <b>Tweede Wereldoorlog</b> blijft de voorraad namen klein door strikte <b>vernoemingsregels</b>. Men geloofde dat eigenschappen van de vernoemde overgingen. Eerste zoon naar vaders vader, eerste dochter naar vaders moeder, dan de andere grootouders, dan ooms en tantes. <b>‘Dood gaat voor levend’</b>: overleden familieleden kregen voorrang.",v:"een Jozef naar opa Jozef, een Maria naar oma Maria"},
+ {t:"IV. Modern: vrijheid en internationalisering",c:"var(--terra)",d:"Vanaf de <b>jaren zestig</b> breekt men met de traditie. De <b>roepnaam</b> wordt de officiële naam. Johannes en Maria verdwijnen naar de tweede of derde plaats. Er komen Engelse, Franse en internationale namen bij, de variatie neemt sterk toe en vernoemen is niet langer de norm.",v:"Kevin, Kelly, Michelle, Linda, Mark"}];
+$$("#wheel button").forEach(b=>b.onclick=()=>{$$("#wheel button").forEach(x=>x.classList.remove("on"));b.classList.add("on");const p=PER[+b.dataset.p];$("#wheelInfo").innerHTML=`<h3 style="color:${p.c}">${p.t}</h3><p>${p.d}</p><p class="small"><b>Voorbeelden:</b> <i>${p.v}</i></p>`;});
+matcher($("#ex-vnsoort"),"vnsoort",[{l:"<i>Fluppe</i> voor Filip",r:"roepnaam"},{l:"<i>Mimietje</i> voor Marie",r:"koosnaam"},{l:"<i>De Kannibaal</i> voor Eddy Merckx",r:"erenaam"},{l:"<i>Blijmoedige Koala</i> bij de scouts",r:"totemnaam"},{l:"<i>Ajuinen</i>: oorspronkelijk een spotnaam, nu met trots gebruikt door de inwoners van Aalst",r:"geuzennaam"},{l:"<i>Berten</i> voor Robert",r:"augmentatief"}],["pseudoniem"]);
+
+/* ================= STATION 5 ================= */
+mcQuiz($("#ex-lees1"),"lees1",[
+ {q:"<i>(oriënterend)</i> Wat is het <b>onderwerp</b> van de tekst?",o:["Hoe je een goede naam kiest voor je kind","De geschiedenis en betekenis van plaats- en persoonsnamen","Het werk van het Meertens Instituut","De wetten rond naamsverandering"],a:1,f:"Titel, tussentitels en slot gaan allemaal over plaats- en persoonsnamen en wat ze vertellen."},
+ {q:"Wat is de <b>hoofdgedachte</b>?",o:["Plaatsnamen zijn belangrijker dan persoonsnamen.","Sinds 1811 veranderen namen niet meer.","Namen zijn een spiegel van de maatschappij: ze tonen landschap, geschiedenis en sociale gewoonten.","Germaanse namen zijn de oudste en mooiste namen."],a:2,f:"Dat staat in de inleiding en wordt in het slot (alinea 10) herhaald met ‘Kortom’."},
+ {q:"Waarom zoekt een toponymist de <b>oudste geschreven vorm</b> van een naam? (alinea 2)",o:["Omdat die het mooiste verhaal vertelt","Omdat die taalkundig het meest doorzichtig is","Omdat dat wettelijk verplicht is","Omdat oude vormen korter zijn"],a:1,f:"Hoe ouder de vorm, hoe beter je nog ziet uit welke woorden de naam bestaat."},
+ {q:"Waarom ontstonden toenamen? (alinea 4)",o:["Napoleon verplichtte ze.","Door bevolkingsgroei en verstedelijking moest men mensen beter kunnen onderscheiden.","De kerk wilde heiligen eren.","Men wilde bezit doorgeven."],a:1,f:"‘Door bevolkingsgroei en verstedelijking’ is het signaal voor de oorzaak."},
+ {q:"Wat betekent ‘dood gaat voor levend’? (alinea 8)",o:["Een naam verdween als de drager stierf.","Kinderen kregen de naam van een gestorven heilige.","Bij het vernoemen kregen overleden familieleden voorrang.","Je mocht een kind nooit naar een levend familielid noemen."],a:2,f:"Een overleden grootouder werd eerst vernoemd, vóór een levende."},
+ {q:"Waarom bleven protestanten heiligennamen geven? (alinea 7)",o:["Omdat ze heiligen vereerden","Omdat die namen al ingeburgerd waren","Omdat de kerk het verplichtte","Omdat ze modieus klonken in het buitenland"],a:1,f:"Ondanks hun afkeer van heiligenverering: de namen waren gewoon geworden."},
+ {q:"Welke tekststructuur gebruikt de schrijver in ‘Van Adelbert tot Kevin’?",o:["Probleem en oplossing","Chronologisch: periodes na elkaar","Voor- en nadelen","Vraag en antwoord"],a:1,f:"Vier periodes in de tijd na elkaar, met signaalwoorden als ‘vanaf’ en ‘daarna’."},
+ {q:"Welke naam past het best bij de periode na 1960?",o:["Gertrud","Adelbert","Kevin","Johannes, vernoemd naar opa"],a:2,f:"Engelse namen als Kevin passen bij de internationalisering na de jaren zestig."}]);
+binary($("#ex-lees2"),"lees2",[
+ {t:"Toponymie steunt vooral op volksverhalen en sagen.",a:false,f:"Fout: ze is net een exacte wetenschap die oude bronnen gebruikt (alinea 2)."},
+ {t:"Plaatsnamen vertellen iets over de vroegere plantengroei.",a:true,f:"Juist (alinea 3)."},
+ {t:"Een hodoniem is de naam van een berg.",a:false,f:"Fout: een hodoniem is een straat- of wegnaam. Een bergnaam is een oroniem."},
+ {t:"Erfelijke familienamen verspreidden zich van de elite naar de lagere standen.",a:true,f:"Juist (alinea 5)."},
+ {t:"In een Germaanse naam bepaalt de eerste stam het geslacht.",a:false,f:"Fout: de tweede stam bepaalt het geslacht (alinea 6)."},
+ {t:"Na 1811 kon je je familienaam vrij veranderen.",a:false,f:"Fout: alleen nog via een Koninklijk Besluit (alinea 5)."},
+ {t:"Heiligennamen werden deels gekozen uit statusoverwegingen.",a:true,f:"Juist: het was ook een modeverschijnsel via steden en elite (alinea 7)."}],["Juist","Fout"]);
+matcher($("#ex-lees3"),"lees3",[{l:"<b>verdringen</b> (alinea 7)",r:"de plaats innemen van iets anders"},{l:"<b>ingeburgerd</b> (alinea 7)",r:"gewoon geworden, door iedereen gebruikt"},{l:"<b>uitheems</b> (alinea 7)",r:"van buitenaf, uit een ander land afkomstig"},{l:"<b>doorzichtig</b> (alinea 2)",r:"waarvan je de betekenis nog makkelijk herkent"},{l:"<b>hulpwetenschap</b> (alinea 2)",r:"een wetenschap die een andere wetenschap ondersteunt"},{l:"<b>verstedelijking</b> (alinea 4)",r:"het groeien van steden"}],["het verdwijnen van een naam"]);
+matcher($("#ex-lees4"),"lees4",[{l:"“<b>In tegenstelling tot</b> wat vaak gedacht wordt…”",r:"tegenstellend"},{l:"“<b>Door</b> bevolkingsgroei en verstedelijking…”",r:"oorzakelijk"},{l:"“<b>Ondanks</b> hun afkeer van heiligenverering…”",r:"toegevend"},{l:"“<b>Vanaf de jaren zestig</b>…”",r:"chronologisch (tijd)"},{l:"“…<b>bijvoorbeeld</b> Adelbert en Gertrud”",r:"toelichtend (voorbeeld)"},{l:"“<b>Kortom</b>, namen zijn een spiegel…”",r:"concluderend"}],["voorwaardelijk"]);
+writer($("#w-samenvatting"),"samenvatting",80,120,"De tekst ‘Namen zijn geen toeval’ legt uit dat…");
+
+/* ================= STATION 6 ================= */
+const CHECK={base:["Elk lesdoel komt aan bod, en voor elk lesdoel heb ik een controlevraag.","Mijn leerlingen doen minstens één keer zelf iets.","Ik gebruik de kernbegrippen en leg ze uit met een voorbeeld.","Mijn les duurt niet langer dan 15 minuten.","Ik gebruik geen namen van klasgenoten zonder hun toestemming."],2:["Ik maak duidelijk wat bewezen is en wat niet."],3:["Ik leg uit dat beelden bij namen aannames zijn, geen feiten."]};
+const GNAME={1:"Historische betekenis",2:"Emotionele betekenis",3:"Sociale betekenis"};
+function showGroup(g){S.group=g;save();$$(".gcard").forEach(c=>c.classList.toggle("sel",+c.dataset.group===g));[1,2,3].forEach(i=>$("#dos"+i).hidden=i!==g);$("#planner").hidden=false;$("#others").hidden=false;
+ $("#groupHint").innerHTML=`Jij bent expert <b>${GNAME[g]}</b>. Wisselen? Klik op een andere kleur.`;
+ const cl=$("#checklist");cl.innerHTML="";CHECK.base.concat(CHECK[g]||[]).forEach((t,i)=>{const k=`chk-${g}-${i}`;const lab=el("label",{},`<input type="checkbox" data-save="${k}"><span>${t}</span>`);cl.appendChild(lab);});bindSaves(cl);bindGroupSaves();
+ const od=$("#otherDossiers");od.innerHTML="";[1,2,3].filter(i=>i!==g).forEach(i=>{const d=el("details",{class:"acc"});d.innerHTML=`<summary>${["","📜","💭","🤝"][i]} Dossier ${i} · ${GNAME[i]}</summary><div class="in">${document.querySelector(`[data-core="${i}"]`).innerHTML}</div>`;od.appendChild(d);});}
+$$(".gcard").forEach(c=>c.onclick=()=>{showGroup(+c.dataset.group);toast("Expertgroep: "+GNAME[+c.dataset.group]);$("#dos"+c.dataset.group).scrollIntoView({behavior:"smooth",block:"start"});});
+gridMatch($("#ex-studies"),"studies",["Pelham e.a. (Dennis en Walter)","Anseel en Duyck (België)","Zwebner e.a. (gezichten)"],[
+ {t:"Bewering",o:["Mensen kiezen vaker een beroep dat op hun naam lijkt.","Mensen werken vaker voor een bedrijf waarvan de naam met dezelfde letter begint.","We groeien naar onze naam toe: je gezicht verraadt je naam."]},
+ {t:"Bewijs",o:["Dennissen bleken vaker tandarts (dentist) dan Walters.","Gegevens over Belgische werknemers en hun werkgevers.","Proefpersonen koppelden namen vaker dan bij toeval juist aan gezichten."]},
+ {t:"Kritiek of andere verklaring",o:["De namen waren populair in andere generaties: leeftijd verklaart het verschil.","Omgekeerd verband: familiebedrijven zijn naar de familie genoemd en familie werkt er.","Naam en uiterlijk hangen samen met sociale achtergrond; de herhaling uit 2026 vond het effect niet terug."]}]);
+const APT={voetbal:["Doelman","Balkens","De Spits","Scoorders"],koken:["Pannekoek","Zoutman","De Kok","Smakers"],dieren:["Dierickx","De Herder","Poothuis","Vogelaar"],muziek:["Zangers","Liedts","De Fluyt","Trommels"],lezen:["Boeckx","Van der Bladzijde","Leesmans","De Pen"],gamen:["Pixelaar","Levelt","De Speler","Knoppers"],tekenen:["Penseel","De Schilder","Verfaillie","Krijtmans"],sport:["Snelders","Loopmans","De Sprinter","Rennen"],dansen:["Danckaert","Van de Dansvloer","Sprongers","De Wals"],slapen:["Slaapmans","Van den Kussen","De Dommel","Snurckx"],reizen:["Vanderwereld","Reizigers","De Koffer","Vliegers"],techniek:["Schroevers","De Monteur","Van de Moer","Bouwers"]};
+$("#aptBtn").onclick=()=>{const v=norm($("#aptIn").value);let k=Object.keys(APT).find(x=>v.includes(x));let list=k?APT[k]:null;
+ if(!list){const w=$("#aptIn").value.trim();if(!w){toast("Typ eerst een hobby of beroep.");return;}const cap=w.charAt(0).toUpperCase()+w.slice(1).toLowerCase();list=["De "+cap,cap+"mans","Van den "+cap,cap+"aert"];}
+ $("#aptOut").innerHTML="Wat dacht je van: "+shuffle(list).slice(0,3).map(x=>`<span class="tag gold" style="font-size:1rem">${x.replace(/</g,"")}</span>`).join(" ")+`<p class="small muted" style="font-family:var(--sans);font-weight:400">Vind je er zelf een betere? Verzin er een die ook klinkt als een echte familienaam!</p>`;};
+orderer($("#ex-keten"),"keten",["<b>Naamkeuze van ouders</b>: ouders kiezen een naam die past bij hun smaak en achtergrond (bv. Kaat).","<b>Associaties en stereotypen</b>: wie de naam hoort, vormt meteen een beeld van de drager (bv. ‘hoogopgeleide ouders’).","<b>Behandeling door anderen</b>: de drager wordt anders behandeld, bv. minder vaak uitgenodigd na een sollicitatie of huuraanvraag.","<b>Gevolgen en reacties</b>: plagerijen, discriminatie, ouders die bewust een andere familienaam kiezen, acties van Unia."],"Juist! Zo leidt een naamkeuze via beelden tot echte gevolgen.");
+sorter($("#ex-praktijk"),"praktijk",[{t:"de naam van de kandidaat",b:"v"},{t:"het inkomen",b:"g"},{t:"de leeftijd",b:"g"},{t:"het beroep",b:"g"},{t:"de tekst van de aanvraag",b:"g"},{t:"het tijdstip van versturen",b:"g"},{t:"het aantal positieve reacties",b:"m"},{t:"het aantal uitnodigingen voor een bezoek",b:"m"}],[{k:"v",l:"Laat ik verschillen",h:"de variabele die je test",c:"var(--terra)"},{k:"g",l:"Houd ik gelijk",h:"zodat niets anders het verschil verklaart",c:"var(--blue)"},{k:"m",l:"Meet ik",h:"het resultaat",c:"var(--olive)"}]);
+$("#printPlan").onclick=()=>{const g=S.group;if(!g)return;const rows=[1,2,3].map(i=>`<tr><td>${["","0–5′","5–10′","10–15′"][i]}</td>${["a","b","c"].map(x=>`<td>${(S.inputs[`g${g}-pl-${i}${x}`]||"").replace(/</g,"&lt;")}</td>`).join("")}</tr>`).join("");
+ printHTML(`<h2>Spiekbrief privéles · ${GNAME[g]}</h2><p>${(S.inputs.naam||"").replace(/</g,"&lt;")}</p><table border="1" cellpadding="6" style="border-collapse:collapse;width:100%"><tr><th>Blok</th><th>Uitleg</th><th>Leerlingen doen</th><th>Controlevraag</th></tr>${rows}</table>`);};
+$$("#standpunt [data-sp]").forEach(b=>{b.onclick=()=>{S.sp=b.dataset.sp;save();$$("#standpunt [data-sp]").forEach(x=>x.classList.toggle("gold",x===b));};if(S.sp===b.dataset.sp)b.classList.add("gold");});
+writer($("#w-stelling"),"stelling",80,150,"Ik vind dat…");
+
+/* ================= STATION 7 ================= */
+sorter($("#ex-sort"),"sort",[
+ {t:"Janssens",b:"A"},{t:"Mariën",b:"A"},{t:"Ooms",b:"A"},{t:"Michiels",b:"A"},
+ {t:"De Clerck",b:"B"},{t:"Smit",b:"B"},{t:"Mulder",b:"B"},{t:"Wittebrood",b:"B"},
+ {t:"De Groote",b:"E"},{t:"De Wilde",b:"E"},{t:"De Jong",b:"E"},{t:"Den Ouden",b:"E"},
+ {t:"Van de Velde",b:"W"},{t:"Verbeek",b:"W"},{t:"Vermeulen",b:"W"},{t:"Van der Poel",b:"W"},
+ {t:"Van Keulen",b:"H"},{t:"Van Dessel",b:"H"},{t:"De Vlaeminck",b:"H"},{t:"Debrabandere",b:"H"}],
+ [{k:"A",l:"Verwantschapsnamen",h:"patroniem, metroniem, familie",c:"var(--terra)"},{k:"B",l:"Beroepsnamen",h:"ook indirect",c:"var(--gold)"},{k:"E",l:"Eigenschapsnamen",h:"uiterlijk, karakter, leeftijd",c:"#8a6b4a"},{k:"W",l:"Woonplaatsnamen",h:"waar woonde hij?",c:"var(--blue)"},{k:"H",l:"Herkomstnamen",h:"waar kwam hij vandaan?",c:"var(--olive)"}]);
+matcher($("#ex-match"),"match",[
+ {l:"Tak van de taalkunde die betekenis, oorsprong en verspreiding van namen onderzoekt",r:"onomastiek"},
+ {l:"Naam voor een natuurlijke of gegraven waterloop of voor stilstaand water",r:"hydroniem"},
+ {l:"Naam voor een straat of weg",r:"hodoniem"},
+ {l:"Naam voor een persoon, zoals Marie, De Bakker of Fluppe",r:"antroponiem"},
+ {l:"Extra naam die spontaan wordt toegevoegd om iemand te onderscheiden; voorloper van de familienaam",r:"toenaam"},
+ {l:"Familienaam die teruggaat op de voornaam van de moeder",r:"metroniem"},
+ {l:"Eigennaam die opvallend goed past bij het beroep of de hobby van de drager",r:"aptoniem"},
+ {l:"Soortnaam die teruggaat op een persoonsnaam, zoals zeppelin",r:"eponiem"},
+ {l:"Soortnaam die teruggaat op een plaatsnaam, zoals bikini",r:"geoniem"},
+ {l:"Spotnaam die de bespotte groep met trots gaat gebruiken (Ajuinen voor Aalstenaars)",r:"geuzennaam"},
+ {l:"Schimpwoord voor de bewoners van een stad of regio, op basis van vermeende eigenaardigheden",r:"locofaulisme"},
+ {l:"Een oude, onbegrijpelijk geworden naam aanpassen aan een bekend woord (Pertsebos → Peerdsbos)",r:"volksetymologie"}],["patroniem","oroniem"]);
+gapfill($("#ex-gap"),"gap","Onomastiek of {naamkunde} bestudeert de betekenis, de oorsprong en de {verspreiding} van namen. Ze heeft twee grote pijlers: de {toponymie} (plaatsnamen) en de {antroponymie} (persoonsnamen). Oorspronkelijk kende men alleen {eennamigheid|eennaamssysteem}: iedereen had maar één naam. Door bevolkingsgroei voegde men een {toenaam} toe om mensen te onderscheiden. Vanaf de late middeleeuwen werden die namen {erfelijk|overerfbaar}. Dat verspreidde zich van zuid naar {noord}, van stad naar platteland. In 1811 legde {Napoleon} de familienaam vast in de {burgerlijke stand}. Een familienaam op basis van de voornaam van de vader heet een {patroniem}, een familienaam op basis van de voornaam van de moeder een {metroniem}.",["aptoniem","hydroniem"]);
+orderer($("#ex-order"),"order",["Eennamigheid: iedereen heeft één (Germaanse) naam","Twaalfde eeuw: toenamen verschijnen, eerst in de Vlaamse steden","Late middeleeuwen: toenamen worden erfelijk","1795: burgerlijke stand in onze zuidelijke gewesten (Frans bewind)","1811: Napoleon legt de familienaam vast in Nederland","2014: Belgische ouders kiezen zelf de familienaam van hun kind"]);
+binary($("#ex-tf"),"tf",[
+ {t:"Mensen vinden de letters uit hun eigen naam gemiddeld mooier dan andere letters.",a:true,f:"Dat is het naamlettereffect, herhaaldelijk aangetoond."},
+ {t:"Een bakker die De Bakker heet, bewijst dat je naam je beroep bepaalt.",a:false,f:"Een aptoniem is een toevalligheid. Eén opvallend geval bewijst niets (illusoire correlatie)."},
+ {t:"Als Dennissen vaker tandarts zijn dan Walters, kan dat ook een generatie-effect zijn.",a:true,f:"Kritiek van Simonsohn: de namen waren populair in andere generaties."},
+ {t:"Onderzoekers zijn het erover eens dat nominatief determinisme bestaat.",a:false,f:"Ze zijn het er net níét over eens."},
+ {t:"In een goede praktijktest is alles gelijk, behalve de naam.",a:true,f:"Zo weet je dat een verschil in reacties aan de naam ligt."},
+ {t:"De familienaam De Bakker zegt vandaag iets over het beroep van de drager.",a:false,f:"Sinds de burgerlijke stand wordt de naam ongewijzigd doorgegeven."},
+ {t:"De sociale betekenis van een voornaam kan in de loop van de tijd veranderen.",a:true,f:"Namen komen op, pieken en doven uit; nieuwe generaties ouders kiezen anders."},
+ {t:"De Belgische herhaling van Verheyen e.a. (2026) vond overtuigend bewijs voor het naam-gezichteffect.",a:false,f:"Ze vond géén overtuigend bewijs: het verschil met toeval was niet significant."}]);
+const NT=[
+ {part:"A",q:"Waar werden toenamen het vroegst vaste familienamen?",o:["In Holland, vooral op het platteland.","In het graafschap Vlaanderen, vooral in de steden.","In Brabant en Limburg, vooral in de dorpen.","Overal tegelijk, pas in 1795."],a:1,f:"In het graafschap Vlaanderen, vooral in de steden."},
+ {part:"A",q:"Wat is een metroniem?",o:["Een naam die afgeleid is van de voornaam van de vader.","Een naam die verwijst naar de woonplaats van een voorouder.","Een naam die verwijst naar het beroep van een voorouder.","Een naam die afgeleid is van de voornaam van de moeder."],a:3,f:"Metroniem = moedersnaam, bv. Mariën (‘van Marie’)."},
+ {part:"A",q:"Welk benoemingsmotief zit vermoedelijk achter de familienaam <i>Vanderlinden</i>?",o:["Een patroniem.","Een beroepsnaam.","Een herkomst- of woonplaatsnaam.","Een eigenschapsnaam."],a:2,f:"De stamvader woonde bij een linde."},
+ {part:"A",q:"Klaas is de zoon van Peter Bernhardszoon. Welke toenaam kreeg Klaas in de middeleeuwen meestal?",o:["Peterszoon.","Bernhardszoon.","Peter Bernhardszoon.","Geen: toenamen bestonden toen nog niet."],a:0,f:"De toenaam verwees naar de eigen vader en veranderde dus elke generatie."},
+ {part:"A",q:"Waarom zegt de familienaam <i>De Bakker</i> vandaag niets meer over het beroep van de drager?",o:["Omdat toenamen altijd al van ouder op kind werden doorgegeven.","Omdat De Bakker oorspronkelijk een eigenschapsnaam was.","Omdat familienamen sinds de invoering van de burgerlijke stand vastliggen en ongewijzigd worden doorgegeven.","Omdat een naam nooit iets zei over het beroep van de drager."],a:2,f:"De naam ligt vast en wordt doorgegeven, los van het beroep."},
+ {part:"B",q:"Wat is het naamlettereffect?",o:["Mensen vinden de letters uit hun eigen naam mooier dan andere letters.","Mensen merken hun eigen naam op, ook als ze naar een ander gesprek luisteren.","Mensen trouwen vaker met iemand van wie de naam met dezelfde letter begint.","Mensen kiezen vaker een beroep dat bij hun naam past."],a:0,f:"Vooral je initialen vind je mooier."},
+ {part:"B",q:"Een kraamverzorgster heet <i>Naaktgeboren</i>. Welk begrip past daar het best bij?",o:["Naamlettereffect.","Aptoniem.","Impliciet egotisme.","Illusoire correlatie."],a:1,f:"Een naam die opvallend goed past bij het beroep."},
+ {part:"B",q:"Een onderzoeker stelt vast dat mannen die Kevin heten vaker in de bouw werken dan mannen die Jozef heten. Welke verklaring past het best bij de kritiek van Simonsohn op nominatief determinisme?",o:["Kevins voelen zich onbewust aangetrokken tot het beroep.","Werkgevers in de bouw nemen liever een Kevin aan.","Het gaat om een aptoniem.","Kevin en Jozef waren populair in een andere generatie, en dat kan het verschil verklaren."],a:3,f:"Een generatie-effect: leeftijd, geen naamdwang."},
+ {part:"B",q:"In een gemeente blijken opvallend veel mensen die <i>Verstraeten</i> heten te werken bij de firma Verstraeten. Welke verklaring past het best bij de kritiek van Simonsohn op nominatief determinisme?",o:["Het naamlettereffect: mensen vinden die naam mooi.","Impliciet egotisme: ze kozen die werkgever omdat die bij hun eigen naam aansluit.","Het verband loopt omgekeerd: het bedrijf is naar de familie genoemd, en familieleden werken er.","Selectieve waarneming: het is puur toeval."],a:2,f:"Omgekeerd verband: niet de naam stuurt de keuze, de familie gaf de firma haar naam."},
+ {part:"B",q:"Waarom is voorzichtigheid geboden bij de conclusie dat we wat uiterlijk betreft ‘naar onze naam toe groeien’?",o:["Omdat de onderzoekers alleen foto’s van kinderen gebruikten.","Omdat naam en uiterlijk allebei kunnen samenhangen met sociale achtergrond, en je naam dus niet de oorzaak van je uiterlijk hoeft te zijn.","Omdat de onderzoekers hun conclusie later zelf introkken.","Omdat een computerprogramma de namen beter raadde dan mensen."],a:1,f:"Een studie die met sociale achtergrond rekening hield (Verheyen e.a. 2026), vond het effect niet terug."},
+ {part:"C",q:"Ouders noemen hun dochter <i>Kaat</i>. Wie de naam hoort, denkt dat de ouders waarschijnlijk hoogopgeleid zijn. Welk begrip beschrijft dat het best?",o:["Het naamlettereffect.","Nominatief determinisme.","De sociale betekenis van een naam.","Een metroniem."],a:2,f:"Mensen kennen een sociale betekenis toe aan een naam."},
+ {part:"C",q:"Je wilt onderzoeken of een naam invloed heeft op de kans om een appartement te huren. Welke opzet is het best?",o:["Je vraagt verhuurders of ze ooit iemand weigerden omwille van zijn naam.","Je stuurt twee aanvragen met een identiek profiel, waarin alleen de naam verschilt, en vergelijkt hoe vaak elke aanvraag een reactie krijgt.","Je stuurt twee aanvragen met een verschillende naam en een verschillend inkomen, en vergelijkt de reacties.","Je telt hoeveel huurders in een wijk een niet-Europese naam hebben."],a:1,f:"Dat is een praktijktest: alleen de naam verschilt."},
+ {part:"C",q:"Waarom kan de sociale betekenis van een voornaam na verloop van tijd veranderen?",o:["Omdat namen opkomen, pieken en weer uitdoven, en jonge ouders andere keuzes maken dan vorige generaties.","Omdat de wet sinds 1987 bepaalt welke voornamen toegelaten zijn.","Omdat alleen de hogere sociale klassen nieuwe voornamen kiezen.","Omdat de oorspronkelijke betekenis van een voornaam in het woordenboek verandert."],a:0,f:"Naammode verandert per generatie."},
+ {part:"C",q:"Waarom leidt een familienaam als <i>Vandeneucker</i> soms tot plagerijen?",o:["Omdat de naam oorspronkelijk een scheldnaam was.","Omdat de naam een metroniem is.","Omdat de naam pas na 1795 ontstond.","Omdat de oorspronkelijke betekenis verloren ging en de naam nu een andere associatie oproept."],a:3,f:"<i>Eucker</i> betekende ‘notenboom’; die betekenis kent niemand nog."},
+ {part:"C",q:"Sinds 2014 kunnen Belgische ouders kiezen welke familienaam hun kind krijgt. Wat bleek volgens de tekst uit een rondvraag van <i>De Standaard</i>?",o:["De meeste ouders kiezen een combinatie van beide familienamen.","Ouders kiezen steeds vaker de familienaam van de vader.","Koppels met een niet-Belgische partner kiezen vaker bewust de Belgische familienaam, om hun kind te beschermen tegen discriminatie.","Ouders kiezen meestal de kortste familienaam."],a:2,f:"Een naamkeuze als bescherming tegen discriminatie."}];
+mcQuiz($("#ex-namentest"),"namentest",NT,{partColor:{A:"terra",B:"olive",C:"blue"}});
+
+/* ================= STATION 8 ================= */
+const LINKS=[
+ {t:"Naamkunde.net",u:"https://www.naamkunde.net/",d:"Verzamelplek over naamkunde in het Nederlandse taalgebied: nieuws, publicaties en verwijzingen.",m:"Zoek één nieuwtje of artikel over namen dat je verrast. Wat is de kern?"},
+ {t:"Taalverhalen: basisbegrippen familienamen",u:"https://taalverhalen.be/over-namen/familienamen/basisbegrippen-familienamen/",d:"Heldere uitleg van de basisbegrippen rond familienamen.",m:"Zoek twee begrippen die je nog niet kende en schrijf ze in je begrippenlijst."},
+ {t:"Familienaam.info",u:"https://familienaam.info/",d:"Betekenis, oorsprong en verspreidingskaarten van achternamen.",m:"Zoek je familienaam: welke verklaring en welke kaart vind je?"},
+ {t:"Geneanet: voornamen",u:"https://nl.geneanet.org/voornaam/",d:"Betekenis en oorsprong van voornamen, gratis te raadplegen.",m:"Zoek de oorsprong van je voornaam. Is het een Germaanse naam, een heiligennaam of een moderne internationale naam?"},
+ {t:"Statbel: namen en voornamen",u:"https://statbel.fgov.be/nl/themas/bevolking/namen-en-voornamen",d:"Officiële Belgische statistieken: meest gegeven voornamen en frequentste familienamen.",m:"Wat zijn de populairste babynamen van het laatste jaar? Hoe vaak komt je eigen naam voor?"},
+ {t:"Nederlandse Voornamenbank",u:"https://nvb.meertens.knaw.nl/",d:"Meertens Instituut: populariteit, verklaring en verspreiding van voornamen in Nederland.",m:"Bekijk de populariteitscurve van je voornaam. Wanneer piekte hij?"},
+ {t:"Nederlandse Familienamenbank",u:"https://www.cbgfamilienamen.nl/nfb/index.php",d:"CBG/Meertens: aantallen naamdragers, verspreidingskaarten en verklaringen van familienamen in Nederland.",m:"Waar in Nederland komt je familienaam (of een variant) het meest voor?"},
+ {t:"Familienaam.be",u:"https://familienaam.be/",d:"Geografische spreiding van familienamen in België, op een kaart.",m:"In welke gemeenten woont de grootste groep dragers van jouw naam? Kun je dat verklaren?"},
+ {t:"CBG: basiskennis familienamen",u:"https://cbg.nl/kennis/basiskennis/familienamen/",d:"Achtergrondtekst over het ontstaan en de soorten familienamen.",m:"Maak een overzichtelijk schema van de tekst (Les 13, vraag 3)."},
+ {t:"Namenloket",u:"https://www.namenloket.be",d:"Namendatabank, begrippenlijst en educatieve teksten over namen in Vlaanderen.",m:"Zoek in de Namendatabank een voorbeeld voor elk benoemingsmotief."}];
+(function(){const w=$("#links");LINKS.forEach((l,i)=>{const a=el("a",{class:"linkcard",href:l.u,target:"_blank",rel:"noopener"},`<span class="dom">${l.u.replace(/^https?:\/\/(www\.)?/,"").replace(/\/$/,"")}</span><b style="font-family:var(--serif);font-size:1.1rem">${["🔤","📚","🗺️","✨","📊","📈","🌳","📍","🧾","🏛️"][i]} ${l.t}</b><span class="small">${l.d}</span><span class="mission"><b>Missie:</b> ${l.m}</span>`);const d=el("div");d.appendChild(a);w.appendChild(d);});})();
+writer($("#w-fam"),"famtekst",50,70,"Mijn familienaam … betekent oorspronkelijk … De naam komt vooral voor in …");
+writer($("#w-voor"),"voortekst",40,60,"Mijn voornaam … komt van … en betekent … Hij is vooral populair in …");
+const RUB=[["Schema’s","overzichtelijk, alle informatie","overzichtelijk, alle informatie","vrij overzichtelijk, bijna alle informatie","onvoldoende overzichtelijk of onvolledig / geen schema"],["Structuur","duidelijke inleiding, midden en slot","duidelijke structuur","enkele elementen ontbreken","gebrekkige of geen structuur"],["Volledigheid","vragen volledig beantwoord","volledig beantwoord","grotendeels beantwoord","gedeeltelijk of niet beantwoord"],["Signaalwoorden","voldoende en passend","voldoende passend","enkele passende","onvoldoende of geen"],["Inhoud","zinvol en logisch","zinvol en logisch","vrij zinvol en logisch","nauwelijks of niet zinvol"],["Spelling en zinsbouw","correct","correct","sporadisch fouten","geregeld of te veel fouten"],["Eigen woorden","eigen woorden, geen plagiaat, geen AI","eigen woorden, geen plagiaat, geen AI","—","plagiaat en/of AI-tekst"]];
+(function(){const t=$("#rubric");t.innerHTML="<tr><th>Criterium</th><th>Uitstekend</th><th>Goed</th><th>Redelijk</th><th>Slecht</th></tr>";RUB.forEach((r,ri)=>{const tr=el("tr");tr.appendChild(el("td",{},`<b>${r[0]}</b>`));for(let c=1;c<=4;c++){const td=el("td",{class:"cell"+(S.rubric[ri]===c?" on":"")},r[c]);td.onclick=()=>{S.rubric[ri]=c;save();[...tr.querySelectorAll(".cell")].forEach(x=>x.classList.remove("on"));td.classList.add("on");};tr.appendChild(td);}t.appendChild(tr);});})();
+
+/* ================= STATION 9 ================= */
+const EXIT=[
+ {q:"Wat bestudeert de <b>antroponymie</b>?",o:["Plaatsnamen","Persoonsnamen","Waternamen","Merknamen"],a:1,f:"Gr. ánthropos = mens."},
+ {q:"Welk benoemingsmotief zit achter <i>Van den Broeck</i>? (<i>broek</i> = drassig, moerassig land)",o:["Patroniem","Beroepsnaam","Woonplaatsnaam","Eigenschapsnaam"],a:2,f:"De eerste drager woonde bij een broek."},
+ {q:"Wat is het verschil tussen een <b>toenaam</b> en een <b>familienaam</b>?",o:["Er is geen verschil.","Een toenaam hoorde bij één persoon en kon per generatie veranderen; een familienaam wordt onveranderd doorgegeven.","Een familienaam is ouder dan een toenaam.","Een toenaam is altijd een beroepsnaam."],a:1,f:"Toenamen werden pas later erfelijk."},
+ {q:"Wat veranderde er door de invoering van de <b>burgerlijke stand</b> (1795/1811)?",o:["Iedereen kreeg een nieuwe voornaam.","Familienamen werden officieel vastgelegd.","Toenamen ontstonden.","Ouders mochten de familienaam kiezen."],a:1,f:"Wie geen naam had, moest er een aannemen."},
+ {q:"Een loodgieter heet <i>Waterman</i>. Dat is…",o:["een bewijs voor nominatief determinisme","een aptoniem: een opvallende, toevallige match","een metroniem","een geoniem"],a:1,f:"Een aptoniem bewijst geen oorzakelijk verband."},
+ {q:"Wat is de beste samenvatting van het onderzoek naar ‘naamdwang’?",o:["Je naam bepaalt je beroep; dat is bewezen.","Namen hebben nooit enig effect.","Er zijn opvallende verbanden, maar ze hebben vaak andere verklaringen; het bewijs is niet overtuigend.","Alleen voornamen hebben effect, familienamen niet."],a:2,f:"Denk aan generatie, omgekeerd verband en sociale achtergrond."},
+ {q:"Iemand zegt: “Die naam klinkt als iemand uit een arm gezin.” Wat is daar het probleem mee?",o:["Niets, namen zeggen altijd iets over inkomen.","Het is een stereotype: een aanname, geen feit, die tot ongelijke behandeling kan leiden.","Het is een etymologische verklaring.","Het is een geuzennaam."],a:1,f:"Stel je automatische associaties in vraag."}];
+let exitScore=null;
+mcQuiz($("#ex-exit"),"exit",EXIT,{onDone:(c,t)=>{exitScore=[c,t];}});
+const CONF=["😟 Nog onzeker","🙂 Gaat wel","😀 Zeker","🤩 Ik kan het uitleggen"];
+(function(){const w=$("#conf");CONF.forEach((c,i)=>{const b=el("button",{class:"btn ghost small"+(S.conf===i?" gold":"")},c);b.onclick=()=>{S.conf=i;save();[...w.children].forEach(x=>x.classList.remove("gold"));b.classList.add("gold");};w.appendChild(b);});})();
+function esc(s){return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/\n/g,"<br>");}
+function ticketText(){const ex=S.scores.exit;let t=0;for(const k in S.scores)t+=S.scores[k].got;
+ return {html:`<div class="card tape" style="border:2px solid var(--ink)"><div class="kicker">Exit ticket · naamkunde</div><h2>🎟️ ${esc(S.inputs.naam)||"(geen naam)"}</h2>
+ <p><b>Expertgroep:</b> ${S.group?GNAME[S.group]:"—"} · <b>Kennischeck:</b> ${exitScore?exitScore[0]+"/"+exitScore[1]:(ex?ex.got+"/"+ex.max+" (beste)":"nog niet gemaakt")} · <b>Totaal punten:</b> ${t} · <b>Stations:</b> ${Object.keys(S.stamps).length}/10</p>
+ <p><b>Zelfvertrouwen:</b> ${S.conf!=null?CONF[S.conf]:"—"}</p><div class="grid3"><div><b>3 dingen die ik leerde</b><p>${esc(S.inputs.x3)}</p></div><div><b>2 begrippen</b><p>${esc(S.inputs.x2)}</p></div><div><b>1 vraag</b><p>${esc(S.inputs.x1)}</p></div></div></div>`,
+ txt:`EXIT TICKET NAAMKUNDE\nNaam: ${S.inputs.naam||""}\nExpertgroep: ${S.group?GNAME[S.group]:"-"}\nKennischeck: ${exitScore?exitScore[0]+"/"+exitScore[1]:(ex?ex.got+"/"+ex.max:"-")}\nTotaal punten: ${t}\nZelfvertrouwen: ${S.conf!=null?CONF[S.conf]:"-"}\n3 dingen: ${S.inputs.x3||""}\n2 begrippen: ${S.inputs.x2||""}\n1 vraag: ${S.inputs.x1||""}`};}
+$("#makeTicket").onclick=()=>{const t=ticketText();const w=$("#ticket");w.innerHTML=t.html;const br=el("div",{class:"btnrow"});const p=el("button",{class:"btn"},"🖨️ Afdrukken / PDF");const c=el("button",{class:"btn ghost"},"📋 Kopieer als tekst");
+ p.onclick=()=>printHTML(t.html);c.onclick=()=>{if(navigator.clipboard)navigator.clipboard.writeText(t.txt).then(()=>toast("Ticket gekopieerd!"));};br.appendChild(p);br.appendChild(c);w.appendChild(br);confetti();w.scrollIntoView({behavior:"smooth"});};
+function printHTML(h){const pa=$("#printArea");pa.innerHTML=h;document.body.classList.add("printing");setTimeout(()=>{window.print();},50);}
+window.addEventListener("afterprint",()=>document.body.classList.remove("printing"));
+
+/* ================= GLOSSARY ================= */
+const GLOSS=[["achternaam","Hetzelfde als familienaam: de naam die aangeeft tot welke familie je behoort.","familienaam"],["adresnaam","Familienaam die teruggaat op de woonplaats van de eerste naamdrager, bv. Vandenbossche.","woonplaatsnaam"],["antroponiem","Naam voor een persoon, zoals Marie, De Bakker of Fluppe.","persoonsnaam"],["antroponymie","Tak van de taalkunde die herkomst, betekenis en verspreiding van persoonsnamen bestudeert.","persoonsnaamkunde"],["appellatief","Woord dat een categorie van zaken, plaatsen of personen noemt (tafel, bos, brug), in tegenstelling tot een eigennaam.","soortnaam"],["aptoniem","Eigennaam die opvallend goed past bij beroep, hobby of eigenschap van de drager: bakker De Bakker, sprinter Usain Bolt.",""],["attestatie","Vermelding van een naam of woord in een historisch document.","bewijsplaats"],["augmentatief","Vervorming van een naam die hem ‘groter’ laat klinken: Berten voor Robert.",""],["benoemingsmotief","Reden waarom een persoon of plaats een naam kreeg: patroniem, metroniem, woonplaats-, herkomst-, beroeps-, eigenschaps- of diernaam.",""],["beroepsnaam","Familienaam die teruggaat op het beroep van de eerste drager: De Bakker, Olieslaegher.",""],["bijnaam","Niet-officiële naam die anderen gebruiken om iemand te typeren.",""],["bouwsteen","Element waaruit een naam is opgebouwd: hout + heem in Houtem, bald + win in Baldwin.",""],["burgerlijke stand","Officiële registratie van geboorten, huwelijken en overlijdens; legde familienamen vast (1795/1811).",""],["eennaamssysteem","Gewoonte om iemand maar één, vaak betekenisvolle naam te geven: Baldwin = ‘moedige vriend’.","eennamigheid"],["eigennaam","Woord dat één individuele persoon, plaats, dier of zaak aanwijst.",""],["eigenschapsnaam","Familienaam die een eigenschap van de eerste drager noemt: De Wilde, Roobaerd.",""],["eponiem","Soortnaam die teruggaat op een persoonsnaam: zeppelin, fosburyflop.",""],["erenaam","Niet-officiële naam als eerbetoon: De Kannibaal voor Eddy Merckx.",""],["etymologie","Studie van herkomst en oorspronkelijke betekenis van woorden; ook: die herkomst zelf.",""],["etymologische betekenis","Betekenis van het oorspronkelijke woord waarop een naam teruggaat: Zedelgem = ‘woonplaats van de lieden van Sidulo’.","historische betekenis"],["fantasienaam","Verzonnen naam zonder historische band met de drager: Beukenlaan zonder beuken.",""],["genealogie","Studie van familieverwantschap en familiegeschiedenis.","stamboomonderzoek"],["genericide","Een merknaam wordt een gewoon woord: pamper voor ‘wegwerpluier’.","merkverwatering"],["geoniem","Soortnaam die teruggaat op een plaatsnaam: bikini, hamburger.",""],["geuzennaam","Spotnaam die de bespotte groep als erenaam gaat gebruiken: Ajuinen voor Aalstenaars.",""],["hodoniem","Naam van een straat of weg.","straatnaam, wegnaam"],["hydroniem","Naam van een waterloop of stilstaand water: Dijle, Leuvense Vaart, Donkmeer.","waternaam"],["hypocoristicon","Koosnaam binnen de familie: Mimietje voor Marie.","koosnaam, troetelnaam, vleinaam"],["impliciet egotisme","Onbewuste voorkeur voor wat op jezelf lijkt (je naam, je initialen).",""],["illusoire correlatie","Een verband zien dat er niet (of veel zwakker) is.",""],["kunstmatige naamgeving","Geplande naamgeving zonder band met de plek: Koningin Astridlaan.",""],["locofaulisme","Schimpwoord voor de bewoners van een stad of regio, op basis van vermeende eigenaardigheden.",""],["metroniem","Familienaam die teruggaat op de voornaam van de moeder: Mariën (‘van Marie’).","moedersnaam"],["microtoponiem","Plaatsnaam van een klein, alleen lokaal bekend element: de Marollen, Gondebeek.",""],["macrotoponiem","Plaatsnaam van een grote, bekende entiteit: Himalaya, New York.",""],["naamdwang","Het idee dat je naam mee bepaalt welke keuzes je maakt; onderzoekers zijn het oneens of het bestaat.","nominatief determinisme"],["naamlettereffect","De neiging om de letters uit je eigen naam, vooral je initialen, mooier te vinden.",""],["natuurlijke naamgeving","Spontane naamgeving die verwijst naar een concreet kenmerk: Molenbeek, Dikkelelindestraat.",""],["nominatief determinisme","Zie naamdwang: je naam zou mee bepalen welk beroep of welke woonplaats je kiest.","naamdwang"],["onomastiek","Tak van de taalkunde die betekenis, oorsprong en verspreiding van eigennamen bestudeert.","naamkunde"],["oroniem","Naam van een berg of heuvel: Kemmelberg.","reliëfnaam"],["overerfbaar","Gezegd van een toenaam die onveranderd van ouder op kind overgaat en zo een familienaam wordt.",""],["patroniem","Naam die teruggaat op de voornaam van de vader: Jansseune (‘zoon van Jan’).","vadersnaam"],["patronymicum","Extra naam naar de voornaam van de vader die elke generatie verandert.",""],["praktijktest","Onderzoek met identieke profielen waarin alleen de naam verschilt, om discriminatie te meten.",""],["pseudoniem","Zelfgekozen niet-officiële naam in het publieke leven.","schuilnaam"],["roepnaam","De naam waarmee iemand aangesproken wordt, vaak verkort: Fluppe voor Filip.",""],["sociale betekenis","Betekenis die mensen aan een persoonsnaam toekennen (Cindy, Johnny) en die sociale, economische of culturele opvattingen weerspiegelt.",""],["soortnaam","Woord voor een hele categorie: tafel, moeras, bos.","appellatief"],["stereotype","Vereenvoudigd, veralgemenend beeld van een groep mensen.",""],["toenaam","Extra naam die spontaan bij de voornaam kwam om iemand te onderscheiden; voorloper van de familienaam.",""],["toponiem","Eigennaam van één specifieke plaats.","plaatsnaam"],["toponymie","Tak van de taalkunde die plaatsnamen bestudeert; ook: alle plaatsnamen van een gebied.","plaatsnaamkunde"],["totemnaam","Bijnaam bij scouts en gidsen: diernaam + eigenschap, bv. Blijmoedige Koala.",""],["verwantschapsnaam","Familienaam naar de rol in de familie: Ooms, Dirkzwager, Parrein (‘peter’).",""],["vernoemingstraditie","Gewoonte om kinderen de voornaam van een familielid te geven, meestal een (groot)ouder.",""],["volksetymologie","Een onbegrijpelijk geworden naam aanpassen aan een bekend woord: Pertsebos → Peerdsbos.",""],["woonplaatsnaam","Familienaam die teruggaat op de woonplaats van de eerste drager: Vandenbossche.","adresnaam"]];
+function renderGloss(f=""){const L=$("#glossList");L.innerHTML="";const q=norm(f);GLOSS.filter(g=>!q||norm(g[0]+" "+g[1]+" "+g[2]).includes(q)).forEach(g=>L.appendChild(el("div",{class:"term"},`<b>${g[0]}</b>${g[2]?` <span class="syn">· ook: ${g[2]}</span>`:""}<div class="small">${g[1]}</div>`)));if(!L.children.length)L.innerHTML='<p class="muted small">Geen begrip gevonden.</p>';}
+renderGloss();$("#glossSearch").oninput=e=>renderGloss(e.target.value);
+function openPanel(id){$("#scrim").classList.add("on");$(id).classList.add("on");}
+function closePanels(){$("#scrim").classList.remove("on");$("#gloss").classList.remove("on");$("#teacher").classList.remove("on");}
+$("#openGloss").onclick=()=>{openPanel("#gloss");setTimeout(()=>$("#glossSearch").focus(),300);};$("#closeGloss").onclick=closePanels;$("#openTeacher").onclick=()=>openPanel("#teacher");$("#closeTeacher").onclick=closePanels;$("#scrim").onclick=closePanels;
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closePanels();});
+$("#resetAll").onclick=()=>{if(confirm("Alles wissen? Je antwoorden, scores en stempels verdwijnen.")){try{localStorage.removeItem(KEY);}catch(e){}location.hash="";location.reload();}};
+
+/* ================= INIT ================= */
+bindSaves();
+if(S.group)showGroup(S.group);
+updateHeader();
+const h=(location.hash.match(/^#s(\d)$/)||[])[1];go(h!=null?+h:0);
+</script>
+</body>
+</html>
